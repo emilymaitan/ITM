@@ -19,8 +19,49 @@ public class VideoMedia extends AbstractMedia {
 	// ***************************************************************
 
 	/* video format metadata */
+	/**
+	 * The video codec.
+	 */
+	protected String videoCodec;
+	/**
+	 * The codec id.
+	 */
+	protected Integer codecID;
+	/**
+	 * The framerate in seconds.
+	 */
+	protected Integer videoFrameRate;
+	/**
+	 * Height of the video in pixels.
+	 */
+	protected Integer videoHeight;
+	/**
+	 * Width of the video in pixels.
+	 */
+	protected Integer videoWidth;
+	
 
 	/* audio format metadata */
+	/**
+	 * The video's audio codec.
+	 */
+	protected String audioCodec;
+	/**
+	 * The video's audio codec.
+	 */
+	protected Integer audiocCodecID;
+	/**
+	 * The number of the video's audio channels.
+	 */
+	protected Integer audioChannels;
+	/**
+	 * The video's audio sample rate in Hz.
+	 */
+	protected Integer audioSampleRate;
+	/**
+	 * The video's audio bitrate in kb/s.
+	 */
+	protected Integer audioBitRate;
 
 	/**
 	 * Constructor.
