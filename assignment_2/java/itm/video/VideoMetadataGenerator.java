@@ -7,6 +7,7 @@ package itm.video;
 
 import itm.model.MediaFactory;
 import itm.model.VideoMedia;
+import itm.util.IOUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -146,11 +147,17 @@ public class VideoMetadataGenerator {
 		// create video media object
 		VideoMedia media = (VideoMedia) MediaFactory.createMedia(input);
 
-		// set video and audio stream metadata 
+		// set video and audio stream metadata
+		// first we'll need a container
+		IContainer container = IContainer.make();
+		int result = -1;
 		
 		// add video tag
+		media.addTag("video");
 
 		// write metadata
+		StringBuffer buf = media.serializeObject();
+		IOUtil.writeFile(buf, outputFile);
 		
 		return media;
 	}
