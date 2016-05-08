@@ -148,9 +148,17 @@ public class VideoMetadataGenerator {
 		VideoMedia media = (VideoMedia) MediaFactory.createMedia(input);
 
 		// set video and audio stream metadata
-		// first we'll need a container
+			// first we'll need container and Co for extracting the data
+			// -> the imports were already there, so I know what to do :) Thanks!
 		IContainer container = IContainer.make();
-		int result = -1;
+		int result = container.open(input.getAbsolutePath(), IContainer.Type.READ, null);
+		if (result < 0) throw new RuntimeException("OOPS! Something went wrong reading the file...");
+		IStream stream = container.getStream(0);
+		IStreamCoder coder = stream.getStreamCoder();
+		if (stream == null || coder == null) throw new RuntimeException("OOPS! Could not extract metadata.");
+		
+			// -> now we've got what we need to extract stuff
+		media.setVideoCodec(coder.getCodec().getName());
 		
 		// add video tag
 		media.addTag("video");
