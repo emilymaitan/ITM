@@ -166,7 +166,11 @@ public class VideoMetadataGenerator {
 			
 			switch (coder.getCodecType()) {
 			case CODEC_TYPE_AUDIO:
-				
+				media.setAudioCodec(coder.getCodec().getName());
+				media.setAudiocCodecID(Integer.valueOf(coder.getCodec().getIDAsInt()));
+				media.setAudioChannels(Integer.valueOf(coder.getChannels()));
+				media.setAudioSampleRate(Integer.valueOf(coder.getSampleRate()));
+				media.setAudioBitRate(Integer.valueOf(coder.getBitRate()/1000)); // converting to kb/sec
 				break;
 			case CODEC_TYPE_VIDEO:
 				media.setVideoCodec(coder.getCodec().getName());
