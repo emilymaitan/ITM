@@ -20,7 +20,7 @@ public class VideoMedia extends AbstractMedia {
 
 	/* video format metadata */
 	/**
-	 * The video codec.
+	 * String representation of the video codec.
 	 */
 	protected String videoCodec;
 	/**
@@ -83,6 +83,14 @@ public class VideoMedia extends AbstractMedia {
 	// Fill in your code here!
 	// ***************************************************************
 
+	public String getVideoCodec() {
+		return videoCodec;
+	}
+
+	public void setVideoCodec(String videoCodec) {
+		this.videoCodec = videoCodec;
+	}
+	
 	/* (de-)serialization */
 
 	/**
@@ -102,6 +110,9 @@ public class VideoMedia extends AbstractMedia {
 		// ***************************************************************
 		// Fill in your code here!
 		// ***************************************************************
+		out.println("videoCodec: " + videoCodec);
+		
+		
 		return data.getBuffer();
 	}
 
