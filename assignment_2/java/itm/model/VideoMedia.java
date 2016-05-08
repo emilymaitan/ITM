@@ -24,13 +24,17 @@ public class VideoMedia extends AbstractMedia {
 	 */
 	protected String videoCodec;
 	/**
-	 * The codec id.
+	 * Integer representation of the codec id.
 	 */
 	protected Integer codecID;
 	/**
-	 * The framerate in seconds.
+	 * The framerate (fps?).
 	 */
-	protected Integer videoFrameRate;
+	protected Double videoFrameRate;
+	/**
+	 * The length of the video in seconds.
+	 */
+	protected Long videoLength;
 	/**
 	 * Height of the video in pixels.
 	 */
@@ -91,8 +95,47 @@ public class VideoMedia extends AbstractMedia {
 		this.videoCodec = videoCodec;
 	}
 	
-	/* (de-)serialization */
+	public Integer getCodecID() {
+		return codecID;
+	}
 
+	public void setCodecID(Integer codecID) {
+		this.codecID = codecID;
+	}
+	
+	public Double getVideoFrameRate() {
+		return videoFrameRate;
+	}
+
+	public void setVideoFrameRate(Double videoFrameRate) {
+		this.videoFrameRate = videoFrameRate;
+	}
+
+	public Long getVideoLength() {
+		return videoLength;
+	}
+
+	public void setVideoLength(Long videoLength) {
+		this.videoLength = videoLength;
+	}
+
+	public Integer getVideoHeight() {
+		return videoHeight;
+	}
+
+	public void setVideoHeight(Integer videoHeight) {
+		this.videoHeight = videoHeight;
+	}
+
+	public Integer getVideoWidth() {
+		return videoWidth;
+	}
+
+	public void setVideoWidth(Integer videoWidth) {
+		this.videoWidth = videoWidth;
+	}
+
+	/* (de-)serialization */
 	/**
 	 * Serializes this object to the passed file.
 	 * 
@@ -110,8 +153,12 @@ public class VideoMedia extends AbstractMedia {
 		// ***************************************************************
 		// Fill in your code here!
 		// ***************************************************************
-		out.println("videoCodec: " + videoCodec);
-		
+		out.println("videoCodec: " + this.getVideoCodec());
+		out.println("codecID: " + this.getCodecID());
+		out.println("videoFrameRate: " + this.getVideoFrameRate());
+		out.println("videoLength: " + this.getVideoLength());
+		out.println("videoWidth: " + this.getVideoWidth());
+		out.println("videoHeight: " + this.getVideoHeight());
 		
 		return data.getBuffer();
 	}
