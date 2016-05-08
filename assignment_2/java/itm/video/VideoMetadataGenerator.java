@@ -174,7 +174,7 @@ public class VideoMetadataGenerator {
 				break;
 			case CODEC_TYPE_VIDEO:
 				media.setVideoCodec(coder.getCodec().getName());
-				media.setCodecID(Integer.valueOf(coder.getCodec().getIDAsInt()));
+				media.setVideoCodecID(Integer.valueOf(coder.getCodec().getIDAsInt()));
 				media.setVideoFrameRate(Double.valueOf(coder.getFrameRate().getDouble()));
 				media.setVideoLength(Long.valueOf((stream.getDuration()*coder.getTimeBase().getNumerator()) / coder.getTimeBase().getDenominator()));
 				media.setVideoWidth(Integer.valueOf(coder.getWidth()));
@@ -193,6 +193,12 @@ public class VideoMetadataGenerator {
 		// write metadata
 		StringBuffer buf = media.serializeObject();
 		IOUtil.writeFile(buf, outputFile);
+		
+		/* // counter-test: deserialize the thing 
+		VideoMedia test = (VideoMedia) MediaFactory.createMedia(input);
+		test.deserializeObject(media.serializeObject().toString());
+		System.out.println(test.toString()); 
+		*/
 		
 		return media;
 	}
