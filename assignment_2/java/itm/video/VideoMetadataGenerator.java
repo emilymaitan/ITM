@@ -26,6 +26,7 @@ import javax.media.protocol.DataSource;
 import com.xuggle.xuggler.IContainer;
 import com.xuggle.xuggler.IStream;
 import com.xuggle.xuggler.IStreamCoder;
+import com.xuggle.xuggler.ICodec;
 import com.xuggle.xuggler.ICodec.Type;
 
 /**
@@ -148,17 +149,39 @@ public class VideoMetadataGenerator {
 		VideoMedia media = (VideoMedia) MediaFactory.createMedia(input);
 
 		// set video and audio stream metadata
-			// first we'll need container and Co for extracting the data
+			// sources for the following code: xuggler API and http://web.archive.org/web/20130404071015/http://www.javacodegeeks.com/2011/02/introduction-xuggler-video-manipulation.html
+			
+		// first we'll need container and Co for extracting the data
 			// -> the imports were already there, so I know what to do :) Thanks!
 		IContainer container = IContainer.make();
 		int result = container.open(input.getAbsolutePath(), IContainer.Type.READ, null);
 		if (result < 0) throw new RuntimeException("OOPS! Something went wrong reading the file...");
-		IStream stream = container.getStream(0);
-		IStreamCoder coder = stream.getStreamCoder();
-		if (stream == null || coder == null) throw new RuntimeException("OOPS! Could not extract metadata.");
 		
-			// -> now we've got what we need to extract stuff
-		media.setVideoCodec(coder.getCodec().getName());
+		for (int i = 0; i < container.getNumStreams(); i++) {
+			IStream stream = container.getStream(i);
+			IStreamCoder coder = stream.getStreamCoder();
+			if (stream == null || coder == null) throw new RuntimeException("OOPS! Could not extract metadata.");
+			
+			// -> now we've got what we need to extract stuff; first check which stream it is
+			
+			switch (coder.getCodecType()) {
+			case CODEC_TYPE_AUDIO:
+				
+				break;
+			case CODEC_TYPE_VIDEO:
+				media.setVideoCodec(coder.getCodec().getName());
+				media.setCodecID(Integer.valueOf(coder.getCodec().getIDAsInt()));
+				media.setVideoFrameRate(Double.valueOf(coder.getFrameRate().getDouble()));
+				media.setVideoLength(Long.valueOf((stream.getDuration()*coder.getTimeBase().getNumerator()) / coder.getTimeBase().getDenominator()));
+				media.setVideoWidth(Integer.valueOf(coder.getWidth()));
+				media.setVideoHeight(Integer.valueOf(coder.getHeight()));
+				break;
+			default:
+				break; 
+			}
+			
+		}
+		
 		
 		// add video tag
 		media.addTag("video");
