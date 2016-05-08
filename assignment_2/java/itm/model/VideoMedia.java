@@ -26,7 +26,7 @@ public class VideoMedia extends AbstractMedia {
 	/**
 	 * Integer representation of the codec id.
 	 */
-	protected Integer codecID;
+	protected Integer videoCodecID;
 	/**
 	 * The framerate (fps?).
 	 */
@@ -95,12 +95,12 @@ public class VideoMedia extends AbstractMedia {
 		this.videoCodec = videoCodec;
 	}
 	
-	public Integer getCodecID() {
-		return codecID;
+	public Integer getVideoCodecID() {
+		return videoCodecID;
 	}
 
-	public void setCodecID(Integer codecID) {
-		this.codecID = codecID;
+	public void setVideoCodecID(Integer videoCodecID) {
+		this.videoCodecID = videoCodecID;
 	}
 	
 	public Double getVideoFrameRate() {
@@ -194,7 +194,7 @@ public class VideoMedia extends AbstractMedia {
 		// Fill in your code here!
 		// ***************************************************************
 		out.println("videoCodec: " + this.getVideoCodec());
-		out.println("codecID: " + this.getCodecID());
+		out.println("videoCodecID: " + this.getVideoCodecID());
 		out.println("videoFrameRate: " + this.getVideoFrameRate());
 		out.println("videoLength: " + this.getVideoLength());
 		out.println("videoWidth: " + this.getVideoWidth());
@@ -225,7 +225,40 @@ public class VideoMedia extends AbstractMedia {
 			// ***************************************************************
 			// Fill in your code here!
 			// ***************************************************************
-		}
+			if (line.startsWith("videoCodec: ")) {
+				this.setVideoCodec(line.substring("videoCodec: ".length()));
+			} else 
+			if (line.startsWith("videoCodecID: ")) {
+				this.setVideoCodecID(Integer.parseInt(line.substring("videoCodecID: ".length())));
+			} else 
+			if (line.startsWith("videoFrameRate: ")) {
+				this.setVideoFrameRate(Double.parseDouble(line.substring("videoFrameRate: ".length())));
+			} else 
+			if (line.startsWith("videoLength: ")) {
+				this.setVideoLength(Long.parseLong(line.substring("videoLength: ".length())));
+			}  else 
+			if (line.startsWith("videoWidth: ")) {
+				this.setVideoWidth(Integer.parseInt(line.substring("videoWidth: ".length())));
+			} else 
+			if (line.startsWith("videoHeight: ")) {
+				this.setVideoHeight(Integer.parseInt(line.substring("videoHeight: ".length())));
+			} else 
+			if (line.startsWith("audioCodec: ")) {
+				this.setAudioCodec(line.substring("audioCodec: ".length()));
+			} else 
+			if (line.startsWith("audioCodecID: ")) {
+				this.setAudiocCodecID(Integer.parseInt(line.substring("audioCodecID: ".length())));
+			} else 
+			if (line.startsWith("audioChannels: ")) {
+				this.setAudioChannels(Integer.parseInt(line.substring("audioChannels: ".length())));
+			} else 
+			if (line.startsWith("audioSampleRate: ")) {
+				this.setAudioSampleRate(Integer.parseInt(line.substring("audioSampleRate: ".length())));
+			} else 
+			if (line.startsWith("audioBitRate: ")) {
+				this.setAudioBitRate(Integer.parseInt(line.substring("audioBitRate: ".length())));
+			}
+		} // end while
 	}
 
 }
