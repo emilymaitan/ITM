@@ -135,6 +135,46 @@ public class VideoMedia extends AbstractMedia {
 		this.videoWidth = videoWidth;
 	}
 
+	public String getAudioCodec() {
+		return audioCodec;
+	}
+
+	public void setAudioCodec(String audioCodec) {
+		this.audioCodec = audioCodec;
+	}
+
+	public Integer getAudiocCodecID() {
+		return audiocCodecID;
+	}
+
+	public void setAudiocCodecID(Integer audiocCodecID) {
+		this.audiocCodecID = audiocCodecID;
+	}
+
+	public Integer getAudioChannels() {
+		return audioChannels;
+	}
+
+	public void setAudioChannels(Integer audioChannels) {
+		this.audioChannels = audioChannels;
+	}
+
+	public Integer getAudioSampleRate() {
+		return audioSampleRate;
+	}
+
+	public void setAudioSampleRate(Integer audioSampleRate) {
+		this.audioSampleRate = audioSampleRate;
+	}
+
+	public Integer getAudioBitRate() {
+		return audioBitRate;
+	}
+
+	public void setAudioBitRate(Integer audioBitRate) {
+		this.audioBitRate = audioBitRate;
+	}
+
 	/* (de-)serialization */
 	/**
 	 * Serializes this object to the passed file.
@@ -159,6 +199,12 @@ public class VideoMedia extends AbstractMedia {
 		out.println("videoLength: " + this.getVideoLength());
 		out.println("videoWidth: " + this.getVideoWidth());
 		out.println("videoHeight: " + this.getVideoHeight());
+		out.println();
+		out.println("audioCodec: " + this.getAudioCodec());
+		out.println("audioCodecID: " + this.getAudiocCodecID());
+		out.println("audioChannels: " + this.getAudioChannels());
+		out.println("audioSampleRate: " + this.getAudioSampleRate());
+		out.println("audioBitRate: " + this.getAudioBitRate());
 		
 		return data.getBuffer();
 	}
