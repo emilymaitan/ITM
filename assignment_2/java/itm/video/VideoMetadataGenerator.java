@@ -152,7 +152,10 @@ public class VideoMetadataGenerator {
 			// sources for the following code: xuggler API and http://web.archive.org/web/20130404071015/http://www.javacodegeeks.com/2011/02/introduction-xuggler-video-manipulation.html
 			
 		// first we'll need container and Co for extracting the data
-			// -> the imports were already there, so I know what to do :) Thanks!
+			// -> the imports were already there, so I have an idea what to use :) Thanks!
+			// Container: contains several streams
+			// IStream: actually just a concept, contains packages with actual stream coders
+			// stream coder: used for properly decoding the thing
 		IContainer container = IContainer.make();
 		int result = container.open(input.getAbsolutePath(), IContainer.Type.READ, null);
 		if (result < 0) throw new RuntimeException("OOPS! Something went wrong reading the file...");
