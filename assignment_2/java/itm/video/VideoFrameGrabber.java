@@ -15,7 +15,9 @@ import javax.imageio.ImageIO;
 
 import com.xuggle.xuggler.ICodec;
 import com.xuggle.xuggler.IContainer;
+import com.xuggle.xuggler.IPacket;
 import com.xuggle.xuggler.IPixelFormat;
+import com.xuggle.xuggler.IRational;
 import com.xuggle.xuggler.IStream;
 import com.xuggle.xuggler.IStreamCoder;
 import com.xuggle.xuggler.IVideoPicture;
@@ -120,13 +122,13 @@ public class VideoFrameGrabber {
 		// all my variables go here...
 		BufferedImage frame = null;						// the thumbnail
 		IContainer container = IContainer.make();		// media container (all streams)
-		IStream videoStream = null;
+		IStream videoStream = null;						// represents the video stream
 		IStreamCoder videoCoder = null;					// video stream coder
 		
 		// try to open the container
 		if (container.open(input.getAbsolutePath(), IContainer.Type.READ, null) < 0) throw new RuntimeException("OOPS! Something went wrong reading the file...");
-		
-		// first we need to find and extract the video stream
+
+		// first we need to find out which StreamID the video stream has
 		int videoStreamID = -1;
 		for (int i = 0; i < container.getNumStreams(); i++) {
 			videoStream = container.getStream(i);
@@ -139,35 +141,21 @@ public class VideoFrameGrabber {
 			}
 		}
 		if (videoStreamID < 0) throw new RuntimeException("OOPS! Could not find video stream.");
+		
+		System.out.println("Video Stream: " + videoStream.toString());
 
 		// now calculate which frame we want
 		long middleframe = Math.round(
-				(videoStream.getDuration() 
+				((videoStream.getDuration() 
 						* videoCoder.getTimeBase().getNumerator()) 
-						/ videoCoder.getTimeBase().getDenominator()
+						/ videoCoder.getTimeBase().getDenominator()) // duration in seconds
 						* videoCoder.getFrameRate().getDouble() 
-						/ 2);
+						/ 2
+						);
+
+		System.out.println("Middle Frame: " + middleframe);
 		
-		if (videoCoder.open(null, null) < 0) throw new RuntimeException("OOPS! Could not open video stream.");
-		
-		// set up colorspace converter
-		IVideoResampler resampler = IVideoResampler.make(
-				videoCoder.getWidth(), videoCoder.getHeight(), IPixelFormat.Type.BGR24,
-				videoCoder.getWidth(), videoCoder.getHeight(), videoCoder.getPixelType());
-		
-		// place the cursor over the frame we want
-		container.seekKeyFrame(videoStreamID, middleframe,IContainer.SEEK_FLAG_FRAME);
-		
-		// set up representation of unencoded image
-		IVideoPicture iFrame = IVideoPicture.make(
-				IPixelFormat.Type.BGR24, videoCoder.getWidth(), videoCoder.getHeight());
-		
-		// to translate between VideoPicture and Java's Bufferedimage, we 
-		// need to set up a converter
-		frame = new BufferedImage(videoCoder.getWidth(), videoCoder.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
-		IConverter converter = ConverterFactory.createConverter(frame, IPixelFormat.Type.BGR24);
-		
-		ImageIO.write(frame, "jpeg", outputFile);
+		//ImageIO.write(frame, "jpeg", outputFile);
 		
 		return outputFile;
 
