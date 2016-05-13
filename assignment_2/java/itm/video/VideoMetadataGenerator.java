@@ -151,11 +151,29 @@ public class VideoMetadataGenerator {
 		// set video and audio stream metadata
 			// sources for the following code: xuggler API and http://web.archive.org/web/20130404071015/http://www.javacodegeeks.com/2011/02/introduction-xuggler-video-manipulation.html
 			
+		/* STUDY AID - XUGGLER CLASSES (taken straight from the API doc)
+		 * 		So that you know what you are doing here :)
+		 *
+		 * IContainer: a file that contains one or more streams of audio and video data
+		 *
+		 * IStream: a virtual concept, because IContainers just contain IPackets
+		 *   each Packet has a StreamId, and all Packets with same ID represent same type of data (usually timebased)
+		 *   is mainly used to get get a proper IStreamCoder for decoder
+		 *
+		 * IStreamCoder: the "work horse"
+		 *   takes IPacket data from IContainer and takes ICodec for de-/encoding the data
+		 *
+		 * IPacket: represents an encoded piece of data for decoding; read it out from IContainer do decode, 
+		 *   and pass it to IstreamCoder to en/decode.
+		 *   the timestamp in an IPacket depends on IContainer; eg FLV is milliseconds
+		 *   Xuggler API uses microsecs for raw data (eg IVideoPicture) and converts when decoding
+		 *
+		 * IVideoPicture: an unencoded picture; use ConverterFactory to decode
+		 *
+		 * */
+		
 		// first we'll need container and Co for extracting the data
-			// -> the imports were already there, so I have an idea what to use :) Thanks!
-			// Container: contains several streams
-			// IStream: actually just a concept, contains packages with actual stream coders
-			// stream coder: used for properly decoding the thing
+					// -> the imports were already there, so I have an idea what to use :) Thanks!
 		IContainer container = IContainer.make();
 		int result = container.open(input.getAbsolutePath(), IContainer.Type.READ, null);
 		if (result < 0) throw new RuntimeException("OOPS! Something went wrong reading the file...");
