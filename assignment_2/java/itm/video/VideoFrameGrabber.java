@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import javax.imageio.ImageIO;
 
@@ -143,7 +144,7 @@ public class VideoFrameGrabber {
 		
 		System.out.println("Video Stream: " + videoStream.toString());
 
-		// now calculate which frame we want
+		// now calculate which frame we want - maybe we'll need that
 		long middleframe = Math.round(
 				((videoStream.getDuration() 
 						* videoCoder.getTimeBase().getNumerator()) 
@@ -151,8 +152,13 @@ public class VideoFrameGrabber {
 						* videoCoder.getFrameRate().getDouble() 
 						/ 2
 						);
-
 		System.out.println("Middle Frame: " + middleframe);	// should be correct
+		
+		// time-based approach
+		long duration = videoStream.getDuration() 
+				* videoCoder.getTimeBase().getNumerator() 
+				/ videoCoder.getTimeBase().getDenominator();
+		System.out.println("Video Duration: " + duration + " sec");
 		
 		if (videoCoder.open(null, null) < 0) throw new RuntimeException("OOPS! Could not initiate coder.");
 		
@@ -164,13 +170,62 @@ public class VideoFrameGrabber {
 		
 		// now it's time to get the frame we want - we need to read it from a packet
 		IPacket packet = IPacket.make(); // an encoded piece of data from one of the container streams
+		
+		// prepare a picture to read decoded stuff into
+		IVideoPicture pic = IVideoPicture.make(
+				videoCoder.getPixelType(), videoCoder.getWidth(), videoCoder.getHeight());
+		
+		// set the video cursor at the next best keyframe ( the first one resets to zero)
+		// backward seeking is important when the video is very short (like the panda vid)
+		container.seekKeyFrame(videoStreamID, -1, 0);
+		container.seekKeyFrame(
+				videoStreamID, 	// on which stream to look
+				0, 				// min timestamp (for short videos)
+				(long) (middleframe * videoCoder.getTimeBase().getDenominator() / (videoCoder.getFrameRate().getDouble()*videoCoder.getTimeBase().getNumerator())), // target
+				container.getDuration(),	// max timestamp
+				0		// seek flags
+				);
+		
 		while(container.readNextPacket(packet) >= 0) {
 			if (packet.getStreamIndex() != videoStreamID) continue; // if not part of video stream, ignore it
+			if (pic.isComplete()) break; // break outer loop to avoid looping through the rest of the vid
+
+			// debugging output
+			long secs = packet.getTimeStamp() 
+						* videoCoder.getTimeBase().getNumerator() 
+						/ videoCoder.getTimeBase().getDenominator();
 			
-			System.out.println("Packet Timestamp: " + packet.getTimeStamp());
+			System.out.print("Packet Timestamp: " + packet.getTimeStamp());
+			System.out.print(" @second " + secs);
+			System.out.println(" -- keyframe: " + packet.isKey());
+			
+			int progress = 0; // how many bytes are decoded
+			while(progress < packet.getSize()) {
+				progress += videoCoder.decodeVideo(pic, packet, progress); // write progress into pic
+				if (pic.isComplete()) {
+					
+					IVideoPicture resampled = null;
+					
+					if (videoCoder.getPixelType() != IPixelFormat.Type.BGR24) { // we must resample
+						resampled = IVideoPicture.make(
+								resampler.getOutputPixelFormat(), videoCoder.getWidth(), videoCoder.getHeight());
+						if (resampler.resample(resampled, pic) <0) throw new RuntimeException("Oops! Resampling failed.");
+						
+						frame = new BufferedImage(videoCoder.getWidth(), videoCoder.getHeight(),BufferedImage.TYPE_3BYTE_BGR);
+						IConverter conv = ConverterFactory.createConverter(frame, IPixelFormat.Type.BGR24);
+						frame = conv.toImage(resampled);
+					} else {
+						frame = new BufferedImage(videoCoder.getWidth(), videoCoder.getHeight(),BufferedImage.TYPE_3BYTE_BGR);
+						IConverter conv = ConverterFactory.createConverter(frame, IPixelFormat.Type.BGR24);
+						frame = conv.toImage(pic);
+					}
+					break;
+				}
+			}
+
 		}
-		
-		//ImageIO.write(frame, "jpeg", outputFile);
+		if (frame == null) throw new RuntimeException("OOPS! No frame could be extracted.");
+		ImageIO.write(frame, "jpeg", outputFile);
 		
 		// resource cleanup
 		videoCoder.close();
