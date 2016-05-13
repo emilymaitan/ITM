@@ -133,7 +133,6 @@ public class VideoFrameGrabber {
 		for (int i = 0; i < container.getNumStreams(); i++) {
 			videoStream = container.getStream(i);
 			videoCoder = videoStream.getStreamCoder();
-			if (videoCoder == null) throw new RuntimeException("OOPS! Could not extract metadata.");
 
 			if (videoCoder.getCodecType() == ICodec.Type.CODEC_TYPE_VIDEO) { // check if this stream is video
 				videoStreamID = i;
@@ -153,9 +152,29 @@ public class VideoFrameGrabber {
 						/ 2
 						);
 
-		System.out.println("Middle Frame: " + middleframe);
+		System.out.println("Middle Frame: " + middleframe);	// should be correct
+		
+		if (videoCoder.open(null, null) < 0) throw new RuntimeException("OOPS! Could not initiate coder.");
+		
+		// set up a colorspace converter
+		IVideoResampler resampler = IVideoResampler.make(
+				videoCoder.getWidth(), videoCoder.getHeight(), IPixelFormat.Type.BGR24, 
+				videoCoder.getWidth(), videoCoder.getHeight(), videoCoder.getPixelType());
+		
+		
+		// now it's time to get the frame we want - we need to read it from a packet
+		IPacket packet = IPacket.make(); // an encoded piece of data from one of the container streams
+		while(container.readNextPacket(packet) >= 0) {
+			if (packet.getStreamIndex() != videoStreamID) continue; // if not part of video stream, ignore it
+			
+			System.out.println("Packet Timestamp: " + packet.getTimeStamp());
+		}
 		
 		//ImageIO.write(frame, "jpeg", outputFile);
+		
+		// resource cleanup
+		videoCoder.close();
+		container.close();
 		
 		return outputFile;
 
