@@ -1,15 +1,25 @@
 package itm.video;
 
-/*******************************************************************************
- This file is part of the ITM course 2016
- (c) University of Vienna 2009-2016
- *******************************************************************************/
-
-import itm.util.ImageCompare;
-
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
+
+import com.xuggle.xuggler.Global;
+import com.xuggle.xuggler.ICodec;
+import com.xuggle.xuggler.IContainer;
+import com.xuggle.xuggler.IPacket;
+import com.xuggle.xuggler.IPixelFormat;
+import com.xuggle.xuggler.IStream;
+import com.xuggle.xuggler.IStreamCoder;
+import com.xuggle.xuggler.IVideoPicture;
+import com.xuggle.xuggler.IVideoResampler;
+import com.xuggle.xuggler.video.ConverterFactory;
+import com.xuggle.xuggler.video.IConverter;
+
+import itm.util.IOUtil;
 
 /**
  * This class reads video files, extracts metadata for both the audio and the
@@ -115,6 +125,81 @@ public class VideoThumbnailGenerator {
 		// ***************************************************************
 
 		// extract frames from input video
+		IContainer container = IContainer.make();
+		if (container.open(input.getAbsolutePath(), IContainer.Type.READ, null) < 0)
+			throw new RuntimeException("Oops! Could not open file.");
+		IStream videoStream = null;
+		IStreamCoder videoCoder = null;
+		
+		int videoStreamID = -1;
+		for (int i = 0; i < container.getNumStreams(); i++) {
+			if (container.getStream(i).getStreamCoder().getCodecType() == ICodec.Type.CODEC_TYPE_VIDEO) {
+				videoStreamID = i;
+				videoStream = container.getStream(i);
+				videoCoder = videoStream.getStreamCoder();
+				break;
+			}
+		}
+		if (videoStream == null || videoCoder == null)
+			throw new RuntimeException("OOPS! Could not extract video stream.");
+		if (videoCoder.open(null, null) < 0) throw new RuntimeException("OOPS! Could not initiate coder.");
+		
+		System.out.println("Video Stream: " + videoStream.toString());
+		
+		// now comes a lot of duplicate code from the frame grabber
+		// I really don't like this, but don't dare to create a seperate class for that stuff
+		ArrayList<BufferedImage> frames = new ArrayList<>();
+		IVideoResampler resampler = IVideoResampler.make(
+				videoCoder.getWidth(), videoCoder.getHeight(), IPixelFormat.Type.BGR24, 
+				videoCoder.getWidth(), videoCoder.getHeight(), videoCoder.getPixelType());
+		IPacket packet = IPacket.make();
+		IVideoPicture pic = IVideoPicture.make(
+				videoCoder.getPixelType(), videoCoder.getWidth(), videoCoder.getHeight());
+		BufferedImage frame = null;
+		
+		ArrayList<Long> secsProcessed = new ArrayList<>();
+		
+		while(container.readNextPacket(packet) >= 0) {
+			if (packet.getStreamIndex() != videoStreamID) continue;
+			long secs = packet.getTimeStamp() 
+					* videoCoder.getTimeBase().getNumerator() 
+					/ videoCoder.getTimeBase().getDenominator();
+			
+			int progress = 0;
+			while(progress < packet.getSize()) {
+				progress += videoCoder.decodeVideo(pic, packet, progress);
+				if (pic.isComplete()) {
+					IVideoPicture resampled = null;
+					
+					if (videoCoder.getPixelType() != IPixelFormat.Type.BGR24) { // we must resample
+						resampled = IVideoPicture.make(
+								resampler.getOutputPixelFormat(), videoCoder.getWidth(), videoCoder.getHeight());
+						if (resampler.resample(resampled, pic) <0) throw new RuntimeException("Oops! Resampling failed.");
+						
+						frame = new BufferedImage(videoCoder.getWidth(), videoCoder.getHeight(),BufferedImage.TYPE_3BYTE_BGR);
+						IConverter conv = ConverterFactory.createConverter(frame, IPixelFormat.Type.BGR24);
+						frame = conv.toImage(resampled);
+					} else {
+						frame = new BufferedImage(videoCoder.getWidth(), videoCoder.getHeight(),BufferedImage.TYPE_3BYTE_BGR);
+						IConverter conv = ConverterFactory.createConverter(frame, IPixelFormat.Type.BGR24);
+						frame = conv.toImage(pic);
+					}
+					
+					if (timespan == 0) {
+						frames.add(frame);
+					} else if ((secs % timespan == 0) && !(secsProcessed.contains(secs))) {
+						secsProcessed.add(secs);
+						frames.add(frame);
+					}
+					break;
+				}
+			}
+		}
+		
+		System.out.println("Number of frames we got: " + frames.size());
+		for (int i = 0; i < frames.size(); i++) {
+			ImageIO.write(frames.get(i), "png", new File(output, input.getName() + "_" + i + ".png"));
+		}
 		
 		// add a watermark of your choice and paste it to the image
         // e.g. text or a graphic
@@ -129,6 +214,8 @@ public class VideoThumbnailGenerator {
 		// loop: get the frame image, encode the image to the video stream
 		
 		// Close the writer
+		videoCoder.close();
+		container.close();
 
 		return outputFile;
 	}
