@@ -8,14 +8,17 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 
-import com.xuggle.xuggler.Global;
+import com.xuggle.mediatool.IMediaWriter;
+import com.xuggle.mediatool.ToolFactory;
 import com.xuggle.xuggler.ICodec;
 import com.xuggle.xuggler.IContainer;
 import com.xuggle.xuggler.IPacket;
 import com.xuggle.xuggler.IPixelFormat;
+import com.xuggle.xuggler.IRational;
 import com.xuggle.xuggler.IStream;
 import com.xuggle.xuggler.IStreamCoder;
 import com.xuggle.xuggler.IVideoPicture;
@@ -23,7 +26,9 @@ import com.xuggle.xuggler.IVideoResampler;
 import com.xuggle.xuggler.video.ConverterFactory;
 import com.xuggle.xuggler.video.IConverter;
 
-import itm.util.IOUtil;
+import itm.util.ImageCompare;
+
+
 
 /**
  * This class reads video files, extracts metadata for both the audio and the
@@ -213,19 +218,51 @@ public class VideoThumbnailGenerator {
         }
         
         for (int i = 0; i < frames.size(); i++) {
-			ImageIO.write(frames.get(i), "png", new File(output, input.getName() + "_" + i + ".png"));
+			//ImageIO.write(frames.get(i), "png", new File(output, input.getName() + "_" + i + ".png"));
 		}
 
 		// create a video writer
+        IMediaWriter writer = ToolFactory.makeWriter(outputFile.getAbsolutePath(), container);
 
 		// add a stream with the proper width, height and frame rate
+        writer.addVideoStream(
+        		0, 							//  index for this stream
+        		0, 							// id for this stream
+        		//ICodec.ID.CODEC_ID_INDEO3, // codec ID
+        		IRational.make(1, 1), 		// framerate
+        		videoCoder.getWidth(), 		// width
+        		videoCoder.getHeight()		// height
+        		);
 		
 		// if timespan is set to zero, compare the frames to use and add 
 		// only frames with significant changes to the final video
+        if (timespan == 0) {
+        	for (int i = 1; i < frames.size(); i++) {
+        		ImageCompare ic = new ImageCompare(frames.get(i),frames.get(i-1));
+        		ic.setParameters(
+        				10, // vertical cols in comparison grid
+        				10, // horizontal rows in grid
+        				2, 	// brightness threshold
+        				10	// stabilization
+        				);
+        		ic.compare();
+        		if (ic.match()) frames.remove(i);
+        	}
+        	System.out.println("Frames after removing some: " + frames.size());
+        }
 
 		// loop: get the frame image, encode the image to the video stream
+        for (int i = 0; i < frames.size(); i++) {
+        	writer.encodeVideo(
+        			0, 					// streamID
+        			frames.get(i), 		// the image
+        			i, 					// timestamp
+        			TimeUnit.SECONDS	// timeunit
+        			);
+        }
 		
 		// Close the writer
+        writer.close();
 		videoCoder.close();
 		container.close();
 
