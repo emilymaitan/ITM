@@ -175,13 +175,14 @@ public class VideoMetadataGenerator {
 		// first we'll need container and Co for extracting the data
 					// -> the imports were already there, so I have an idea what to use :) Thanks!
 		IContainer container = IContainer.make();
-		int result = container.open(input.getAbsolutePath(), IContainer.Type.READ, null);
-		if (result < 0) throw new RuntimeException("OOPS! Something went wrong reading the file...");
+		if (container.open(input.getAbsolutePath(), IContainer.Type.READ, null) < 0) 
+			throw new RuntimeException("OOPS! Something went wrong reading the file...");
 		
 		for (int i = 0; i < container.getNumStreams(); i++) {
 			IStream stream = container.getStream(i);
+			if (stream == null) throw new RuntimeException("OOPS! Could not extract stream for stream @id " + i);
 			IStreamCoder coder = stream.getStreamCoder();
-			if (stream == null || coder == null) throw new RuntimeException("OOPS! Could not extract metadata.");
+			if (coder == null) throw new RuntimeException("OOPS! Could not extract coder for stream @id " + i);
 			
 			// -> now we've got what we need to extract stuff; first check which stream it is
 			
@@ -215,11 +216,11 @@ public class VideoMetadataGenerator {
 		StringBuffer buf = media.serializeObject();
 		IOUtil.writeFile(buf, outputFile);
 		
-		/* // counter-test: deserialize the thing 
-		VideoMedia test = (VideoMedia) MediaFactory.createMedia(input);
-		test.deserializeObject(media.serializeObject().toString());
-		System.out.println(test.toString()); 
-		*/
+		// counter-test: deserialize the thing from the freshly created file
+/*		VideoMedia copy = new VideoMedia();
+		copy.readFromFile(outputFile);
+		System.out.println(copy.toString()); */
+		
 		
 		return media;
 	}
