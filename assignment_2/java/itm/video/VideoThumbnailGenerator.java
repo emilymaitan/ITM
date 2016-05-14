@@ -1,8 +1,12 @@
 package itm.video;
 
+import java.awt.AlphaComposite;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -197,12 +201,20 @@ public class VideoThumbnailGenerator {
 		}
 		
 		System.out.println("Number of frames we got: " + frames.size());
-		for (int i = 0; i < frames.size(); i++) {
-			ImageIO.write(frames.get(i), "png", new File(output, input.getName() + "_" + i + ".png"));
-		}
 		
 		// add a watermark of your choice and paste it to the image
         // e.g. text or a graphic
+		BufferedImage watermark = ImageIO.read(new URL("http://wwwlab.cs.univie.ac.at/~a1306497/ITM/nekoDoodle.png"));
+        AlphaComposite alpha = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5F); // transparency
+        for (int i = 0; i < frames.size(); i++) {
+        	Graphics2D image2d = frames.get(i).createGraphics();
+        	image2d.setComposite(alpha);
+            image2d.drawImage(watermark.getScaledInstance(50, 50, Image.SCALE_SMOOTH),null,null);
+        }
+        
+        for (int i = 0; i < frames.size(); i++) {
+			ImageIO.write(frames.get(i), "png", new File(output, input.getName() + "_" + i + ".png"));
+		}
 
 		// create a video writer
 
