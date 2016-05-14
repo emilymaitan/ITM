@@ -171,7 +171,7 @@ public class VideoFrameGrabber {
 		IVideoPicture pic = IVideoPicture.make(
 				videoCoder.getPixelType(), videoCoder.getWidth(), videoCoder.getHeight());
 		
-		// set the video cursor at the next best keyframe ( the first one resets to zero)
+		// set the video cursor at the next best keyframe ( the first one rewinds to zero)
 		// backward seeking is important when the video is very short (like the panda vid)
 		container.seekKeyFrame(videoStreamID, -1, 0);
 		container.seekKeyFrame(
