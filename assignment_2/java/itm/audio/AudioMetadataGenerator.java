@@ -140,7 +140,7 @@ public class AudioMetadataGenerator {
 
 		// create an audio metadata object
 		AudioMedia media = (AudioMedia) MediaFactory.createMedia(input);		
-
+		System.out.println();
 		// load the input audio file, do not decode
 
 		// read AudioFormat properties
