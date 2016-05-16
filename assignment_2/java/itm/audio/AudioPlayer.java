@@ -11,6 +11,7 @@ import java.io.IOException;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -78,20 +79,24 @@ public class AudioPlayer {
 			throws UnsupportedAudioFileException, IOException {
 
 		AudioInputStream din = null;
-		
+
 		// ***************************************************************
 		// Fill in your code here!
 		// ***************************************************************
 
 		// open audio stream
-		
+		din = AudioSystem.getAudioInputStream(input);
+
 		// get format
-		
+		AudioFormat format = din.getFormat();
+
 		// get decoded format
-		
+		AudioFormat decodedFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 44100, 16, 2, 4, 44100, false);
+
 		// get decoded audio input stream
- 
-		return din;
+		AudioInputStream decin = AudioSystem.getAudioInputStream(decodedFormat, din);
+
+		return decin;
 	}
 
 	/**
@@ -107,19 +112,61 @@ public class AudioPlayer {
 	private void rawplay(AudioInputStream audio) throws IOException,
 			LineUnavailableException {
 
-		
-		
 		// ***************************************************************
 		// Fill in your code here!
 		// ***************************************************************
 
 		// get audio format
-		
-		// get a source data line
-		
-		// read samples from audio and write them to the data line 
+		AudioFormat format = audio.getFormat();
 
+		// get a source data line
+		DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+		SourceDataLine line = (SourceDataLine) AudioSystem.getLine(info);	
+		
+		// read samples from audio and write them to the data line
+		line.open(format);
+		line.start();
+		
+		byte[] buffer = new byte[line.getBufferSize()];		
+		long sleepyTime = (long)((float)line.getBufferSize()/(2*format.getSampleRate()));		
+		
+		int remaining;
+		int offset;
+		int available;
+
+		try {
+			while ((remaining = audio.read(buffer)) >= 0) {
+				// if no data is available sleep for half a line buffer worth of time
+				if (remaining == 0) {
+					Thread.sleep(sleepyTime);
+					continue;
+				}				
+				
+				offset = 0;
+				
+				while (remaining > 0) {
+					if ((available = line.available()) == 0) {
+						Thread.sleep(sleepyTime);
+						continue;
+					}			
+					if (remaining > available) {
+						line.write(buffer, offset, available);						
+						offset += available;
+						remaining -= available;						
+					} else {
+						line.write(buffer, offset, remaining);						
+						remaining = 0;
+					}
+				}
+			}			
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} 
+		
 		// properly close the line!
+		line.drain();
+		line.stop();
+		line.close();
 	}
 
 	/**
@@ -129,8 +176,7 @@ public class AudioPlayer {
 	public static void main(String[] args) throws Exception {
 
 		if (args.length < 1) {
-			System.out
-					.println("usage: java itm.audio.AudioPlayer <input-audioFile>");
+			System.out.println("usage: java itm.audio.AudioPlayer <input-audioFile>");
 			System.exit(1);
 		}
 		File fi = new File(args[0]);

@@ -10,7 +10,14 @@ import itm.model.MediaFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
+
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 /**
  * This class reads audio files of various formats and stores some basic audio
@@ -89,6 +96,7 @@ public class AudioMetadataGenerator {
 					System.err
 							.println("Error when creating metadata from file "
 									+ input + " : " + e0.toString());
+					e0.printStackTrace();
 				}
 
 			}
@@ -140,19 +148,73 @@ public class AudioMetadataGenerator {
 
 		// create an audio metadata object
 		AudioMedia media = (AudioMedia) MediaFactory.createMedia(input);		
-		System.out.println();
+		
 		// load the input audio file, do not decode
+		try {
+			// read AudioFormat properties
+			AudioFileFormat fileFormat = AudioSystem.getAudioFileFormat(input);						
+			AudioFormat audioFormat = fileFormat.getFormat();
+			
+			media.setEncoding(audioFormat.getEncoding().toString());
+			media.setFrequency((int)audioFormat.getSampleRate());
+			media.setChannels(audioFormat.getChannels());
+			//media.setBitrate(audioFormat.getSampleSizeInBits());
+			
+			media.setDuration((int)(fileFormat.getFrameLength() / (audioFormat.getSampleRate())));
+						
+			if (fileFormat.properties() != null) {
+				media.setAuthor((String)fileFormat.properties().get("author"));
+				media.setTitle((String)fileFormat.properties().get("title"));
+				
+				String datestr = (String)fileFormat.properties().get("date");
+				if (datestr != null) {
+					try {
+						media.setDate(DateFormat.getInstance().parse(datestr));
+					} catch (ParseException e) { media.setDate(null); }
+				}
+				
+				Long duration;
+				if ((duration = (Long)fileFormat.properties().get("duration")) != null) 
+					media.setDuration(((long)duration)/1000000);
+				
+				media.setComment((String)fileFormat.properties().get("comment"));
+				media.setAlbum((String)fileFormat.properties().get("album"));
+				try {
+					media.setTrack(Integer.parseInt((String)fileFormat.properties().get("mp3.id3tag.track")));
+				} catch(NumberFormatException e) {
+					
+				};
+				
+				media.setComposer((String)fileFormat.properties().get("composer"));
+				media.setGenre((String)fileFormat.properties().get("mp3.id3tag.genre"));
+				
+				Integer frequency = (Integer)fileFormat.properties().get("mp3.frequency.hz");
+				if (frequency != null) 
+					media.setFrequency(frequency);
+				
+				Integer bitrate = (Integer)fileFormat.properties().get("mp3.bitrate.nominal.bps");
+				if (bitrate != null) 
+					media.setBitrate(bitrate);
+				
+				Integer channels = (Integer)fileFormat.properties().get("mp3.channels");
+				if (channels != null)
+					media.setChannels(channels);
+			}
 
-		// read AudioFormat properties
-
-		// read file-type specific properties
+		} catch (UnsupportedAudioFileException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		// you might have to distinguish what properties are available for what audio format
+		System.out.println(media);
 
+		
 		// add a "audio" tag
-
+		media.addTag("audio");
+		
 		// close the audio and write the md file.
-
+		media.writeToFile(new File(output.getAbsoluteFile() + File.separator + "img_" + input.getName() + ".txt"));
 		return media;
 	}
 

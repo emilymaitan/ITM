@@ -3,12 +3,17 @@ package itm.audio;
 /*******************************************************************************
  This file is part of the ITM course 2016
  (c) University of Vienna 2009-2016
-*******************************************************************************/
-
+ *******************************************************************************/
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.sound.sampled.AudioFileFormat.Type;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 /**
  * 
@@ -58,8 +63,9 @@ public class AudioThumbGenerator {
 			File[] files = input.listFiles();
 			for (File f : files) {
 
-				String ext = f.getName().substring(
-						f.getName().lastIndexOf(".") + 1).toLowerCase();
+				String ext = f.getName()
+						.substring(f.getName().lastIndexOf(".") + 1)
+						.toLowerCase();
 				if (ext.equals("wav") || ext.equals("mp3") || ext.equals("ogg")) {
 					try {
 						File result = processAudio(f, output);
@@ -74,8 +80,9 @@ public class AudioThumbGenerator {
 
 			}
 		} else {
-			String ext = input.getName().substring(
-					input.getName().lastIndexOf(".") + 1).toLowerCase();
+			String ext = input.getName()
+					.substring(input.getName().lastIndexOf(".") + 1)
+					.toLowerCase();
 			if (ext.equals("wav") || ext.equals("mp3") || ext.equals("ogg")) {
 				try {
 					File result = processAudio(input, output);
@@ -114,17 +121,28 @@ public class AudioThumbGenerator {
 
 		File outputFile = new File(output, input.getName() + ".wav");
 
-
 		// ***************************************************************
 		// Fill in your code here!
 		// ***************************************************************
+		AudioFormat decodedFormat = new AudioFormat(
+				AudioFormat.Encoding.PCM_SIGNED, 44100, 16, 2, 4, 44100, false);
 
 		// load the input audio file
-
-		// cut the audio data in the stream to a given length
-
-		// save the acoustic thumbnail as WAV file
-
+		try (
+			AudioInputStream din = AudioSystem.getAudioInputStream(input);
+			AudioInputStream dcin = AudioSystem.getAudioInputStream(decodedFormat, din);
+			// cut 	the audio data in the stream to a given length
+			AudioInputStream thumbStr = new AudioInputStream(dcin, decodedFormat, 44100*thumbNailLength*2)
+			) {
+			
+			// save the acoustic thumbnail as WAV file
+			AudioSystem.write(thumbStr, Type.WAVE, outputFile);
+			
+		} catch (UnsupportedAudioFileException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		
 		return outputFile;
 	}
 
@@ -135,7 +153,7 @@ public class AudioThumbGenerator {
 	public static void main(String[] args) throws Exception {
 
 		// args = new String[]{"./media/audio", "./test", "10"};
-		
+
 		if (args.length < 3) {
 			System.out
 					.println("usage: java itm.audio.AudioThumbGenerator <input-audioFile> <output-directory> <length>");
@@ -146,7 +164,8 @@ public class AudioThumbGenerator {
 		File fi = new File(args[0]);
 		File fo = new File(args[1]);
 		Integer length = new Integer(args[2]);
-		AudioThumbGenerator audioThumb = new AudioThumbGenerator(length.intValue());
+		AudioThumbGenerator audioThumb = new AudioThumbGenerator(
+				length.intValue());
 		audioThumb.batchProcessAudioFiles(fi, fo);
 	}
 
