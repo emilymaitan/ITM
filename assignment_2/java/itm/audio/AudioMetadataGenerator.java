@@ -207,14 +207,15 @@ public class AudioMetadataGenerator {
 		}
 
 		// you might have to distinguish what properties are available for what audio format
-		System.out.println(media);
 
 		
 		// add a "audio" tag
 		media.addTag("audio");
 		
+		// System.out.println(media);
+		
 		// close the audio and write the md file.
-		media.writeToFile(new File(output.getAbsoluteFile() + File.separator + "img_" + input.getName() + ".txt"));
+		media.writeToFile(outputFile);
 		return media;
 	}
 
