@@ -132,7 +132,7 @@ public class AudioThumbGenerator {
 			AudioInputStream din = AudioSystem.getAudioInputStream(input);
 			AudioInputStream dcin = AudioSystem.getAudioInputStream(decodedFormat, din);
 			// cut 	the audio data in the stream to a given length
-			AudioInputStream thumbStr = new AudioInputStream(dcin, decodedFormat, 44100*thumbNailLength*2)
+			AudioInputStream thumbStr = new AudioInputStream(dcin, decodedFormat, 44100*thumbNailLength)
 			) {
 			
 			// save the acoustic thumbnail as WAV file
