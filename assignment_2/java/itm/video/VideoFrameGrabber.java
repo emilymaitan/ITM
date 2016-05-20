@@ -114,7 +114,7 @@ public class VideoFrameGrabber {
 		// ***************************************************************
 		// sources:
 		// https://github.com/artclarke/xuggle-xuggler/blob/master/src/com/xuggle/xuggler/demos/DecodeAndCaptureFrames.java
-		// and ...
+		// 
 		
 		// all my variables go here...
 		BufferedImage frame = null;						// the thumbnail
@@ -173,14 +173,23 @@ public class VideoFrameGrabber {
 		
 		// set the video cursor at the next best keyframe ( the first one rewinds to zero)
 		// backward seeking is important when the video is very short (like the panda vid)
-		container.seekKeyFrame(videoStreamID, -1, 0);
+//		container.seekKeyFrame(videoStreamID, -1, 0);
+//		container.seekKeyFrame(
+//				videoStreamID, 	// on which stream to look
+//				0, 				// min timestamp (for short videos)
+//				(long) (middleframe * videoCoder.getTimeBase().getDenominator() / (videoCoder.getFrameRate().getDouble()*videoCoder.getTimeBase().getNumerator())), // target
+//				container.getDuration(),	// max timestamp
+//				0		// seek flags
+//				);
+		
 		container.seekKeyFrame(
-				videoStreamID, 	// on which stream to look
-				0, 				// min timestamp (for short videos)
-				(long) (middleframe * videoCoder.getTimeBase().getDenominator() / (videoCoder.getFrameRate().getDouble()*videoCoder.getTimeBase().getNumerator())), // target
-				container.getDuration(),	// max timestamp
-				0		// seek flags
+				videoStreamID,
+				0,
+				videoStream.getDuration() /2,
+				videoStream.getDuration() ,
+				0
 				);
+	
 		
 		while(container.readNextPacket(packet) >= 0) {
 			if (packet.getStreamIndex() != videoStreamID) continue; // if not part of video stream, ignore it
