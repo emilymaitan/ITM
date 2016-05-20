@@ -203,6 +203,8 @@ public class VideoThumbnailGenerator {
 					break;
 				}
 			}
+//			assert (pic.isComplete());
+//			pic = IVideoPicture.make(videoCoder.getPixelType(), videoCoder.getWidth(), videoCoder.getHeight());
 		}
 		
 		System.out.println("Number of frames we got: " + frames.size());
@@ -217,18 +219,19 @@ public class VideoThumbnailGenerator {
             image2d.drawImage(watermark.getScaledInstance(50, 50, Image.SCALE_SMOOTH),null,null);
         }
         
-        for (int i = 0; i < frames.size(); i++) {
-			//ImageIO.write(frames.get(i), "png", new File(output, input.getName() + "_" + i + ".png"));
-		}
+//        // debug output
+//        for (int i = 0; i < frames.size(); i++) {
+//			ImageIO.write(frames.get(i), "png", new File(output, input.getName() + "_" + i + ".png"));
+//		}
 
 		// create a video writer
-        IMediaWriter writer = ToolFactory.makeWriter(outputFile.getAbsolutePath(), container);
+        IMediaWriter writer = ToolFactory.makeWriter(outputFile.getAbsolutePath());
 
 		// add a stream with the proper width, height and frame rate
         writer.addVideoStream(
         		0, 							//  index for this stream
         		0, 							// id for this stream
-        		//ICodec.ID.CODEC_ID_INDEO3, // codec ID
+        		ICodec.ID.CODEC_ID_MPEG4,	// codec ID
         		IRational.make(1, 1), 		// framerate
         		videoCoder.getWidth(), 		// width
         		videoCoder.getHeight()		// height
@@ -237,19 +240,28 @@ public class VideoThumbnailGenerator {
 		// if timespan is set to zero, compare the frames to use and add 
 		// only frames with significant changes to the final video
         if (timespan == 0) {
-        	for (int i = 1; i < frames.size(); i++) {
-        		ImageCompare ic = new ImageCompare(frames.get(i),frames.get(i-1));
+        	for (int i = 2; i < frames.size(); i++) { // keep the first frame
+        		ImageCompare ic = new ImageCompare(frames.get(i-1),frames.get(i));
+        		//ic.setDebugMode(2);
         		ic.setParameters(
-        				10, // vertical cols in comparison grid
-        				10, // horizontal rows in grid
-        				2, 	// brightness threshold
-        				10	// stabilization
+        				6, 	// vertical cols in comparison grid
+        				6, 	// horizontal rows in grid
+        				20, 	// brightness threshold
+        				10		// stabilization
         				);
         		ic.compare();
-        		if (ic.match()) frames.remove(i);
+        		if (ic.match()) {
+        			frames.remove(i);
+        			i--;
+        		}
         	}
         	System.out.println("Frames after removing some: " + frames.size());
         }
+        
+//        // debug output
+//        for (int i = 0; i < frames.size(); i++) {
+//			ImageIO.write(frames.get(i), "png", new File(output, input.getName() + "_" + i + ".png"));
+//		}
 
 		// loop: get the frame image, encode the image to the video stream
         for (int i = 0; i < frames.size(); i++) {
