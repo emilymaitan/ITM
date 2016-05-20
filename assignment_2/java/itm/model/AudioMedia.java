@@ -24,12 +24,12 @@ public class AudioMedia extends AbstractMedia {
 	private Date date = null;
 	private String comment = null;
 	private String album = null;
-	private int track = 0;
+	private int track = -1;
 	private String composer = null;
 	private String genre = null;
-	private int frequency = 0;
-	private int bitrate = 0;
-	private int channels = 0;
+	private int frequency = -1;
+	private int bitrate = -1;
+	private int channels = -1;
 
 	/**
 	 * Constructor.
