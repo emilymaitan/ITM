@@ -168,7 +168,7 @@ public class AudioMetadataGenerator {
 			//media.setBitrate(audioFormat.getSampleSizeInBits());
 			
 			if (fileFormat.getFrameLength() < 0) {
-				// it's the JAR-bug again (full issue see below)
+				// it's probably the JAR-bug again (full issue see below)
 				// there's nothing I can do but notify the user via -1 that it went wrong
 				media.setDuration(-1);
 				
@@ -183,10 +183,9 @@ public class AudioMetadataGenerator {
 			} else 
 				media.setDuration((int)(fileFormat.getFrameLength() / (audioFormat.getSampleRate())));
 						
-			if (fileFormat.properties() != null) {
-				
-				
-				System.out.println(fileFormat.properties().toString());
+			if (fileFormat.properties() != null && !(fileFormat.properties().isEmpty())) {
+
+				//System.out.println(fileFormat.properties().toString());
 				
 				media.setAuthor((String)fileFormat.properties().get("author"));
 				media.setTitle((String)fileFormat.properties().get("title"));
@@ -230,13 +229,15 @@ public class AudioMetadataGenerator {
 					media.setGenre((String)fileFormat.properties().get("ogg.comment.genre"));
 					media.setFrequency((int)fileFormat.properties().get("ogg.frequency.hz"));
 					media.setBitrate((int)fileFormat.properties().get("ogg.bitrate.nominal.bps"));
+				} else if (fileFormat.getType().getExtension().equalsIgnoreCase("wav")) {
+					// my experience tells me: this is dead code. wav fileformat.properties() maps ARE empty
 				}
+
+			} else { // it's most likely either ogg or wav with tritonis_vorbis?
 				
-			} else { // it's most likely either ogg or wav with vorbis
-				
-				 //System.err.println("Please try a different JAR. OR IDE. Or classpath.");
+				System.err.println("Please try a different JAR. OR IDE. Or classpath.");
 				/** WEIRD OBSERVATIONS when using Eclipse
-				 * - using the "faulty" vorbisspi always seems to work and never gives nullptrs
+				 * - the "faulty" vorbisspi always seems to work and never gives nullptrs
 				 * 		- whereas the tritonus_jorbis does not seem to work here
 				 * - however, if you use vorbisspi, the thumbgenerator produces empty files for ogg -> wav
 				 * 		- ... except if you use BOTH of them in IntelliJ (why?!)
