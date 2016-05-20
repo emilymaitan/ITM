@@ -138,7 +138,7 @@ public class VideoFrameGrabber {
 		}
 		if (videoStreamID < 0) throw new RuntimeException("OOPS! Could not find video stream.");
 		
-		System.out.println("Video Stream: " + videoStream.toString());
+//		System.out.println("Video Stream: " + videoStream.toString());
 
 		// now calculate which frame we want - maybe we'll need that
 		long middleframe = Math.round(
@@ -148,13 +148,13 @@ public class VideoFrameGrabber {
 						* videoCoder.getFrameRate().getDouble() 
 						/ 2
 						);
-		System.out.println("Middle Frame: " + middleframe);	// should be correct
+//		System.out.println("Middle Frame: " + middleframe);	// should be correct
 		
 		// time-based approach
 		long duration = videoStream.getDuration() 
 				* videoCoder.getTimeBase().getNumerator() 
 				/ videoCoder.getTimeBase().getDenominator();
-		System.out.println("Video Duration: " + duration + " sec");
+//		System.out.println("Video Duration: " + duration + " sec");
 		
 		if (videoCoder.open(null, null) < 0) throw new RuntimeException("OOPS! Could not initiate coder.");
 		
@@ -172,23 +172,25 @@ public class VideoFrameGrabber {
 				videoCoder.getPixelType(), videoCoder.getWidth(), videoCoder.getHeight());
 		
 		// set the video cursor at the next best keyframe ( the first one rewinds to zero)
-		// backward seeking is important when the video is very short (like the panda vid)
-//		container.seekKeyFrame(videoStreamID, -1, 0);
-//		container.seekKeyFrame(
-//				videoStreamID, 	// on which stream to look
-//				0, 				// min timestamp (for short videos)
-//				(long) (middleframe * videoCoder.getTimeBase().getDenominator() / (videoCoder.getFrameRate().getDouble()*videoCoder.getTimeBase().getNumerator())), // target
-//				container.getDuration(),	// max timestamp
-//				0		// seek flags
-//				);
+		container.seekKeyFrame(videoStreamID, -1, 0);
+		
+		// the following two seek-methods work the same
 		
 		container.seekKeyFrame(
-				videoStreamID,
-				0,
-				videoStream.getDuration() /2,
-				videoStream.getDuration() ,
-				0
+				videoStreamID, 	// on which stream to look
+				0, 				// min timestamp (for short videos)
+				(long) (middleframe * videoCoder.getTimeBase().getDenominator() / (videoCoder.getFrameRate().getDouble()*videoCoder.getTimeBase().getNumerator())), // target
+				container.getDuration(),	// max timestamp
+				0		// seek flags
 				);
+		
+//		container.seekKeyFrame(
+//				videoStreamID,
+//				0,
+//				videoStream.getDuration() /2,
+//				videoStream.getDuration() ,
+//				0
+//				);
 	
 		
 		while(container.readNextPacket(packet) >= 0) {
@@ -200,9 +202,9 @@ public class VideoFrameGrabber {
 						* videoCoder.getTimeBase().getNumerator() 
 						/ videoCoder.getTimeBase().getDenominator();
 			
-			System.out.print("Packet Timestamp: " + packet.getTimeStamp());
-			System.out.print(" @second " + secs);
-			System.out.println(" -- keyframe: " + packet.isKey());
+//			System.out.print("Packet Timestamp: " + packet.getTimeStamp());
+//			System.out.print(" @second " + secs);
+//			System.out.println(" -- keyframe: " + packet.isKey());
 			
 			int progress = 0; // how many bytes are decoded
 			while(progress < packet.getSize()) {
