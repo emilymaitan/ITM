@@ -184,6 +184,10 @@ public class AudioMetadataGenerator {
 				media.setDuration((int)(fileFormat.getFrameLength() / (audioFormat.getSampleRate())));
 						
 			if (fileFormat.properties() != null) {
+				
+				
+				System.out.println(fileFormat.properties().toString());
+				
 				media.setAuthor((String)fileFormat.properties().get("author"));
 				media.setTitle((String)fileFormat.properties().get("title"));
 				
@@ -193,34 +197,43 @@ public class AudioMetadataGenerator {
 						media.setDate(DateFormat.getInstance().parse(datestr));
 					} catch (ParseException e) { media.setDate(null); }
 				}
-				
+			
 				Long duration;
 				if ((duration = (Long)fileFormat.properties().get("duration")) != null) 
 					media.setDuration(((long)duration)/1000000);
 				
 				media.setComment((String)fileFormat.properties().get("comment"));
 				media.setAlbum((String)fileFormat.properties().get("album"));
-				try {
-					media.setTrack(Integer.parseInt((String)fileFormat.properties().get("mp3.id3tag.track")));
-				} catch(NumberFormatException e) {
-					
-				};
-				
 				media.setComposer((String)fileFormat.properties().get("composer"));
-				media.setGenre((String)fileFormat.properties().get("mp3.id3tag.genre"));
 				
-				Integer frequency = (Integer)fileFormat.properties().get("mp3.frequency.hz");
-				if (frequency != null) 
-					media.setFrequency(frequency);
+				if (fileFormat.getType().getExtension().equalsIgnoreCase("mp3")) {
+					try {
+						media.setTrack(Integer.parseInt((String)fileFormat.properties().get("mp3.id3tag.track")));
+					} catch (NumberFormatException e) {};
+					
+					media.setGenre((String)fileFormat.properties().get("mp3.id3tag.genre"));
+					
+					Integer frequency = (Integer)fileFormat.properties().get("mp3.frequency.hz");
+					if (frequency != null) media.setFrequency(frequency);
+					
+					Integer bitrate = (Integer)fileFormat.properties().get("mp3.bitrate.nominal.bps");
+					if (bitrate != null) media.setBitrate(bitrate);
+					
+					Integer channels = (Integer)fileFormat.properties().get("mp3.channels");
+					if (channels != null) media.setChannels(channels);
+					
+				} else if (fileFormat.getType().getExtension().equalsIgnoreCase("ogg")) {
+					try {
+						media.setTrack(Integer.parseInt((String)fileFormat.properties().get("ogg.comment.track")));
+					} catch (NumberFormatException e) {};
+					media.setChannels((Integer)fileFormat.properties().get("ogg.channels"));
+					media.setGenre((String)fileFormat.properties().get("ogg.comment.genre"));
+					media.setFrequency((int)fileFormat.properties().get("ogg.frequency.hz"));
+					media.setBitrate((int)fileFormat.properties().get("ogg.bitrate.nominal.bps"));
+				}
 				
-				Integer bitrate = (Integer)fileFormat.properties().get("mp3.bitrate.nominal.bps");
-				if (bitrate != null) 
-					media.setBitrate(bitrate);
+			} else { // it's most likely either ogg or wav with vorbis
 				
-				Integer channels = (Integer)fileFormat.properties().get("mp3.channels");
-				if (channels != null)
-					media.setChannels(channels);
-			} else {
 				 //System.err.println("Please try a different JAR. OR IDE. Or classpath.");
 				/** WEIRD OBSERVATIONS when using Eclipse
 				 * - using the "faulty" vorbisspi always seems to work and never gives nullptrs
