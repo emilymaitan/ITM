@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
@@ -159,12 +160,28 @@ public class AudioMetadataGenerator {
 //			System.out.println("file: " + fileFormat.toString());
 //			System.out.println("audio: " + audioFormat.toString());
 			
+			media.addTag(fileFormat.getType().getExtension());
+			
 			media.setEncoding(audioFormat.getEncoding().toString());
 			media.setFrequency((int)audioFormat.getSampleRate());
 			media.setChannels(audioFormat.getChannels());
 			//media.setBitrate(audioFormat.getSampleSizeInBits());
 			
-			media.setDuration((int)(fileFormat.getFrameLength() / (audioFormat.getSampleRate())));
+			if (fileFormat.getFrameLength() < 0) {
+				// it's the JAR-bug again (full issue see below)
+				// there's nothing I can do but notify the user via -1 that it went wrong
+				media.setDuration(-1);
+				
+				// they're all negative except the filesize
+//				AudioInputStream ais = AudioSystem.getAudioInputStream(input);
+//				System.out.println(
+//						"Filesize: " + input.length() + 
+//						"\n Framesize: " + ais.getFormat().getFrameSize() + 
+//						"\n Framerate: " + ais.getFormat().getFrameRate() + 
+//						"\n Framelength: " + ais.getFrameLength()
+//						);
+			} else 
+				media.setDuration((int)(fileFormat.getFrameLength() / (audioFormat.getSampleRate())));
 						
 			if (fileFormat.properties() != null) {
 				media.setAuthor((String)fileFormat.properties().get("author"));
@@ -225,7 +242,7 @@ public class AudioMetadataGenerator {
 		// add a "audio" tag
 		media.addTag("audio");
 		
-		//System.out.println(media);
+		System.out.println(media);
 		
 		// close the audio and write the md file.
 		media.writeToFile(outputFile);
