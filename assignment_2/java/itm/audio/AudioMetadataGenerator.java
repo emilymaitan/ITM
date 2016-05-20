@@ -150,10 +150,14 @@ public class AudioMetadataGenerator {
 		AudioMedia media = (AudioMedia) MediaFactory.createMedia(input);		
 		
 		// load the input audio file, do not decode
+		// you might have to distinguish what properties are available for what audio format
 		try {
 			// read AudioFormat properties
 			AudioFileFormat fileFormat = AudioSystem.getAudioFileFormat(input);						
 			AudioFormat audioFormat = fileFormat.getFormat();
+			
+			System.out.println("file: " + fileFormat.toString());
+			System.out.println("audio: " + audioFormat.toString());
 			
 			media.setEncoding(audioFormat.getEncoding().toString());
 			media.setFrequency((int)audioFormat.getSampleRate());
@@ -199,6 +203,17 @@ public class AudioMetadataGenerator {
 				Integer channels = (Integer)fileFormat.properties().get("mp3.channels");
 				if (channels != null)
 					media.setChannels(channels);
+			} else {
+				 //System.err.println("Please try a different JAR. OR IDE. Or classpath.");
+				/** WEIRD OBSERVATIONS when using Eclipse
+				 * - using the "faulty" vorbisspi always seems to work and never gives nullptrs
+				 * 		- whereas the tritonus_jorbis does not seem to work here
+				 * - however, if you use vorbisspi, the thumbgenerator produces empty files for ogg -> wav
+				 * 		- ... except if you use BOTH of them in IntelliJ (why?!)
+				 * 			- the dependencies are different... probably... IJ does it better?
+				 *  	- using both in Eclipse still produces empty files
+				 * 
+				 * */
 			}
 
 		} catch (UnsupportedAudioFileException e) {
@@ -206,13 +221,11 @@ public class AudioMetadataGenerator {
 			e.printStackTrace();
 		}
 
-		// you might have to distinguish what properties are available for what audio format
-
 		
 		// add a "audio" tag
 		media.addTag("audio");
 		
-		// System.out.println(media);
+		System.out.println(media);
 		
 		// close the audio and write the md file.
 		media.writeToFile(outputFile);
