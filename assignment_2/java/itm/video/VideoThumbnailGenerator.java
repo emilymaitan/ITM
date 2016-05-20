@@ -153,7 +153,7 @@ public class VideoThumbnailGenerator {
 			throw new RuntimeException("OOPS! Could not extract video stream.");
 		if (videoCoder.open(null, null) < 0) throw new RuntimeException("OOPS! Could not initiate coder.");
 		
-		System.out.println("Video Stream: " + videoStream.toString());
+//		System.out.println("Video Stream: " + videoStream.toString());
 		
 		// now comes a lot of duplicate code from the frame grabber
 		// I really don't like this, but don't dare to create a seperate class for that stuff
@@ -204,10 +204,11 @@ public class VideoThumbnailGenerator {
 				}
 			}
 //			assert (pic.isComplete());
+//			pic.delete();
 //			pic = IVideoPicture.make(videoCoder.getPixelType(), videoCoder.getWidth(), videoCoder.getHeight());
 		}
 		
-		System.out.println("Number of frames we got: " + frames.size());
+//		System.out.println("Number of frames we got: " + frames.size());
 		
 		// add a watermark of your choice and paste it to the image
         // e.g. text or a graphic
@@ -255,7 +256,7 @@ public class VideoThumbnailGenerator {
         			i--;
         		}
         	}
-        	System.out.println("Frames after removing some: " + frames.size());
+//        	System.out.println("Frames after removing some: " + frames.size());
         }
         
 //        // debug output
