@@ -225,7 +225,7 @@ public class AudioMetadataGenerator {
 		// add a "audio" tag
 		media.addTag("audio");
 		
-		System.out.println(media);
+		//System.out.println(media);
 		
 		// close the audio and write the md file.
 		media.writeToFile(outputFile);
