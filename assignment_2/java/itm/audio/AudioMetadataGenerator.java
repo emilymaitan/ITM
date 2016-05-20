@@ -156,8 +156,8 @@ public class AudioMetadataGenerator {
 			AudioFileFormat fileFormat = AudioSystem.getAudioFileFormat(input);						
 			AudioFormat audioFormat = fileFormat.getFormat();
 			
-			System.out.println("file: " + fileFormat.toString());
-			System.out.println("audio: " + audioFormat.toString());
+//			System.out.println("file: " + fileFormat.toString());
+//			System.out.println("audio: " + audioFormat.toString());
 			
 			media.setEncoding(audioFormat.getEncoding().toString());
 			media.setFrequency((int)audioFormat.getSampleRate());
