@@ -1,0 +1,8 @@
+#build files
+build/
+
+#media
+media/audio/
+media/video/
+media/img/
+
