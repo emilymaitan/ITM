@@ -5,6 +5,11 @@ build/
 media/audio/
 media/video/
 media/img/
+webapps/itm/media/
+
+#tomcat logs
+tools/tomcat/apache-tomcat-9.0.0.M1/logs/
+tools/tomcat/apache-tomcat-9.0.0.M1/work/*
 
 #test output folder
 test/
