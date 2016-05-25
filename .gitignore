@@ -6,6 +6,12 @@ media/audio/
 media/video/
 media/img/
 
+<<<<<<< HEAD
+=======
+#test output folder
+test/
+
+>>>>>>> branch 'master' of https://github.com/emilymaitan/ITM
 #eclipse project files?
 #.project
 #.classpath
