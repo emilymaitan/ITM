@@ -6,6 +6,9 @@ media/audio/
 media/video/
 media/img/
 
+#eclipse project files?
+#.project
+#.classpath
 
 *.class
 
