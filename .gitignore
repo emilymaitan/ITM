@@ -6,6 +6,9 @@ media/audio/
 media/video/
 media/img/
 
+#test output folder
+test/
+
 #eclipse project files?
 #.project
 #.classpath
