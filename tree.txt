@@ -1,0 +1,513 @@
+## PS Command: tree /F > tree.txt
+
+Folder PATH listing for volume Windows
+Volume serial number is <snip>
+C:.
+│   .classpath
+│   .gitignore
+│   .project
+│   Answers.txt
+│   ant.bat
+│   ant.sh
+│   build.xml
+│   README.md
+│   README.txt
+│   test.log
+│   tomcat.bat
+│   tomcat.sh
+│   tree.txt
+│   
+├───bin
+│   └───itm
+│       ├───audio
+│       │       AudioMetadataGenerator.class
+│       │       AudioPlayer.class
+│       │       AudioThumbGenerator.class
+│       │       
+│       ├───image
+│       │       ImageConverter.class
+│       │       ImageHistogramGenerator.class
+│       │       ImageMetadataGenerator.class
+│       │       ImageThumbnailGenerator.class
+│       │       
+│       ├───model
+│       │       AbstractMedia.class
+│       │       AudioMedia.class
+│       │       ImageMedia.class
+│       │       MediaFactory.class
+│       │       VideoMedia.class
+│       │       
+│       ├───util
+│       │       Histogram.class
+│       │       ImageCompare.class
+│       │       IOUtil.class
+│       │       
+│       └───video
+│               VideoFrameGrabber.class
+│               VideoMetadataGenerator$1.class
+│               VideoMetadataGenerator.class
+│               VideoThumbnailGenerator.class
+│               
+├───build
+│   └───itm
+│       ├───audio
+│       │       AudioMetadataGenerator.class
+│       │       AudioPlayer.class
+│       │       AudioThumbGenerator.class
+│       │       
+│       ├───image
+│       │       ImageConverter.class
+│       │       ImageHistogramGenerator.class
+│       │       ImageMetadataGenerator.class
+│       │       ImageThumbnailGenerator.class
+│       │       
+│       ├───model
+│       │       AbstractMedia.class
+│       │       AudioMedia.class
+│       │       ImageMedia.class
+│       │       MediaFactory.class
+│       │       VideoMedia.class
+│       │       
+│       ├───util
+│       │       Histogram.class
+│       │       ImageCompare.class
+│       │       IOUtil.class
+│       │       
+│       └───video
+│               VideoFrameGrabber.class
+│               VideoMetadataGenerator$1.class
+│               VideoMetadataGenerator.class
+│               VideoThumbnailGenerator.class
+│               
+├───java
+│   └───itm
+│       ├───audio
+│       │       AudioMetadataGenerator.java
+│       │       AudioPlayer.java
+│       │       AudioThumbGenerator.java
+│       │       
+│       ├───image
+│       │       ImageConverter.java
+│       │       ImageHistogramGenerator.java
+│       │       ImageMetadataGenerator.java
+│       │       ImageThumbnailGenerator.java
+│       │       
+│       ├───model
+│       │       AbstractMedia.java
+│       │       AudioMedia.java
+│       │       ImageMedia.java
+│       │       MediaFactory.java
+│       │       VideoMedia.java
+│       │       
+│       ├───util
+│       │       Histogram.java
+│       │       ImageCompare.java
+│       │       IOUtil.java
+│       │       
+│       └───video
+│               VideoFrameGrabber.java
+│               VideoMetadataGenerator.java
+│               VideoThumbnailGenerator.java
+│               
+├───lib
+│       commons-cli.jar
+│       jl1.0.jar
+│       jmf.jar
+│       jogg-0.0.7.jar
+│       jorbis-0.0.15.jar
+│       logback-classic.jar
+│       logback-core.jar
+│       mp3spi1.9.4.jar
+│       prefuse.jar
+│       slf4j-api.jar
+│       tritonus_aos-0.3.6.jar
+│       tritonus_dsp-0.3.6.jar
+│       tritonus_jorbis-0.3.6.jar
+│       tritonus_share.jar
+│       vorbisspi1.0.2.jar
+│       xuggle-xuggler-5.4.jar
+│       
+├───test
+│       dutch.asf_thumb.avi
+│       dutch.asf_thumb.jpg
+│       vid_dutch.asf.txt
+│       
+├───tools
+│   ├───ant
+│   │   └───apache-ant-1.7.0
+│   │       │   fetch.xml
+│   │       │   get-m2.xml
+│   │       │   INSTALL
+│   │       │   KEYS
+│   │       │   LICENSE
+│   │       │   LICENSE.dom
+│   │       │   LICENSE.sax
+│   │       │   LICENSE.xerces
+│   │       │   NOTICE
+│   │       │   README
+│   │       │   WHATSNEW
+│   │       │   
+│   │       ├───bin
+│   │       │       ant
+│   │       │       ant.bat
+│   │       │       ant.cmd
+│   │       │       antenv.cmd
+│   │       │       antRun
+│   │       │       antRun.bat
+│   │       │       antRun.pl
+│   │       │       complete-ant-cmd.pl
+│   │       │       envset.cmd
+│   │       │       lcp.bat
+│   │       │       runant.pl
+│   │       │       runant.py
+│   │       │       runrc.cmd
+│   │       │       
+│   │       ├───etc
+│   │       │   │   ant-bootstrap.jar
+│   │       │   │   changelog.xsl
+│   │       │   │   coverage-frames.xsl
+│   │       │   │   jdepend-frames.xsl
+│   │       │   │   jdepend.xsl
+│   │       │   │   junit-frames-xalan1.xsl
+│   │       │   │   junit-frames.xsl
+│   │       │   │   junit-noframes.xsl
+│   │       │   │   log.xsl
+│   │       │   │   maudit-frames.xsl
+│   │       │   │   mmetrics-frames.xsl
+│   │       │   │   tagdiff.xsl
+│   │       │   │   
+│   │       │   └───checkstyle
+│   │       │           checkstyle-frames.xsl
+│   │       │           checkstyle-text.xsl
+│   │       │           checkstyle-xdoc.xsl
+│   │       │           
+│   │       └───lib
+│   │               ant-1.7.0.pom
+│   │               ant-1.7.0.pom.md5
+│   │               ant-1.7.0.pom.sha1
+│   │               ant-antlr-1.7.0.pom
+│   │               ant-antlr-1.7.0.pom.md5
+│   │               ant-antlr-1.7.0.pom.sha1
+│   │               ant-antlr.jar
+│   │               ant-apache-bcel-1.7.0.pom
+│   │               ant-apache-bcel-1.7.0.pom.md5
+│   │               ant-apache-bcel-1.7.0.pom.sha1
+│   │               ant-apache-bcel.jar
+│   │               ant-apache-bsf-1.7.0.pom
+│   │               ant-apache-bsf-1.7.0.pom.md5
+│   │               ant-apache-bsf-1.7.0.pom.sha1
+│   │               ant-apache-bsf.jar
+│   │               ant-apache-log4j-1.7.0.pom
+│   │               ant-apache-log4j-1.7.0.pom.md5
+│   │               ant-apache-log4j-1.7.0.pom.sha1
+│   │               ant-apache-log4j.jar
+│   │               ant-apache-oro-1.7.0.pom
+│   │               ant-apache-oro-1.7.0.pom.md5
+│   │               ant-apache-oro-1.7.0.pom.sha1
+│   │               ant-apache-oro.jar
+│   │               ant-apache-regexp-1.7.0.pom
+│   │               ant-apache-regexp-1.7.0.pom.md5
+│   │               ant-apache-regexp-1.7.0.pom.sha1
+│   │               ant-apache-regexp.jar
+│   │               ant-apache-resolver-1.7.0.pom
+│   │               ant-apache-resolver-1.7.0.pom.md5
+│   │               ant-apache-resolver-1.7.0.pom.sha1
+│   │               ant-apache-resolver.jar
+│   │               ant-commons-logging-1.7.0.pom
+│   │               ant-commons-logging-1.7.0.pom.md5
+│   │               ant-commons-logging-1.7.0.pom.sha1
+│   │               ant-commons-logging.jar
+│   │               ant-commons-net-1.7.0.pom
+│   │               ant-commons-net-1.7.0.pom.md5
+│   │               ant-commons-net-1.7.0.pom.sha1
+│   │               ant-commons-net.jar
+│   │               ant-jai-1.7.0.pom
+│   │               ant-jai-1.7.0.pom.md5
+│   │               ant-jai-1.7.0.pom.sha1
+│   │               ant-jai.jar
+│   │               ant-javamail-1.7.0.pom
+│   │               ant-javamail-1.7.0.pom.md5
+│   │               ant-javamail-1.7.0.pom.sha1
+│   │               ant-javamail.jar
+│   │               ant-jdepend-1.7.0.pom
+│   │               ant-jdepend-1.7.0.pom.md5
+│   │               ant-jdepend-1.7.0.pom.sha1
+│   │               ant-jdepend.jar
+│   │               ant-jmf-1.7.0.pom
+│   │               ant-jmf-1.7.0.pom.md5
+│   │               ant-jmf-1.7.0.pom.sha1
+│   │               ant-jmf.jar
+│   │               ant-jsch-1.7.0.pom
+│   │               ant-jsch-1.7.0.pom.md5
+│   │               ant-jsch-1.7.0.pom.sha1
+│   │               ant-jsch.jar
+│   │               ant-junit-1.7.0.pom
+│   │               ant-junit-1.7.0.pom.md5
+│   │               ant-junit-1.7.0.pom.sha1
+│   │               ant-junit.jar
+│   │               ant-launcher-1.7.0.pom
+│   │               ant-launcher-1.7.0.pom.md5
+│   │               ant-launcher-1.7.0.pom.sha1
+│   │               ant-launcher.jar
+│   │               ant-netrexx-1.7.0.pom
+│   │               ant-netrexx-1.7.0.pom.md5
+│   │               ant-netrexx-1.7.0.pom.sha1
+│   │               ant-netrexx.jar
+│   │               ant-nodeps-1.7.0.pom
+│   │               ant-nodeps-1.7.0.pom.md5
+│   │               ant-nodeps-1.7.0.pom.sha1
+│   │               ant-nodeps.jar
+│   │               ant-parent-1.7.0.pom
+│   │               ant-parent-1.7.0.pom.md5
+│   │               ant-parent-1.7.0.pom.sha1
+│   │               ant-starteam-1.7.0.pom
+│   │               ant-starteam-1.7.0.pom.md5
+│   │               ant-starteam-1.7.0.pom.sha1
+│   │               ant-starteam.jar
+│   │               ant-stylebook-1.7.0.pom
+│   │               ant-stylebook-1.7.0.pom.md5
+│   │               ant-stylebook-1.7.0.pom.sha1
+│   │               ant-stylebook.jar
+│   │               ant-swing-1.7.0.pom
+│   │               ant-swing-1.7.0.pom.md5
+│   │               ant-swing-1.7.0.pom.sha1
+│   │               ant-swing.jar
+│   │               ant-testutil-1.7.0.pom
+│   │               ant-testutil-1.7.0.pom.md5
+│   │               ant-testutil-1.7.0.pom.sha1
+│   │               ant-testutil.jar
+│   │               ant-trax-1.7.0.pom
+│   │               ant-trax-1.7.0.pom.md5
+│   │               ant-trax-1.7.0.pom.sha1
+│   │               ant-trax.jar
+│   │               ant-weblogic-1.7.0.pom
+│   │               ant-weblogic-1.7.0.pom.md5
+│   │               ant-weblogic-1.7.0.pom.sha1
+│   │               ant-weblogic.jar
+│   │               ant.jar
+│   │               libraries.properties
+│   │               README
+│   │               xercesImpl.jar
+│   │               xml-apis.jar
+│   │               
+│   └───tomcat
+│       └───apache-tomcat-9.0.0.M1
+│           │   LICENSE
+│           │   NOTICE
+│           │   RELEASE-NOTES
+│           │   RUNNING.txt
+│           │   
+│           ├───bin
+│           │       bootstrap.jar
+│           │       catalina-tasks.xml
+│           │       catalina.bat
+│           │       catalina.sh
+│           │       commons-daemon-native.tar.gz
+│           │       commons-daemon.jar
+│           │       configtest.bat
+│           │       configtest.sh
+│           │       daemon.sh
+│           │       digest.bat
+│           │       digest.sh
+│           │       setclasspath.bat
+│           │       setclasspath.sh
+│           │       shutdown.bat
+│           │       shutdown.sh
+│           │       startup.bat
+│           │       startup.sh
+│           │       tomcat-juli.jar
+│           │       tomcat-native.tar.gz
+│           │       tool-wrapper.bat
+│           │       tool-wrapper.sh
+│           │       version.bat
+│           │       version.sh
+│           │       
+│           ├───conf
+│           │   │   catalina.policy
+│           │   │   catalina.properties
+│           │   │   context.xml
+│           │   │   logging.properties
+│           │   │   server.xml
+│           │   │   tomcat-users.xml
+│           │   │   tomcat-users.xsd
+│           │   │   web.xml
+│           │   │   
+│           │   └───Catalina
+│           │       └───localhost
+│           │               itm.xml
+│           │               
+│           ├───lib
+│           │       annotations-api.jar
+│           │       catalina-ant.jar
+│           │       catalina-ha.jar
+│           │       catalina-storeconfig.jar
+│           │       catalina-tribes.jar
+│           │       catalina.jar
+│           │       ecj-4.5.jar
+│           │       el-api.jar
+│           │       jasper-el.jar
+│           │       jasper.jar
+│           │       jaspic-api.jar
+│           │       jsp-api.jar
+│           │       servlet-api.jar
+│           │       tomcat-api.jar
+│           │       tomcat-coyote.jar
+│           │       tomcat-dbcp.jar
+│           │       tomcat-i18n-es.jar
+│           │       tomcat-i18n-fr.jar
+│           │       tomcat-i18n-ja.jar
+│           │       tomcat-jdbc.jar
+│           │       tomcat-jni.jar
+│           │       tomcat-util-scan.jar
+│           │       tomcat-util.jar
+│           │       tomcat-websocket.jar
+│           │       websocket-api.jar
+│           │       
+│           ├───logs
+│           │       catalina.2016-01-02.log
+│           │       catalina.2016-01-03.log
+│           │       catalina.2016-01-13.log
+│           │       catalina.2016-01-24.log
+│           │       catalina.2016-05-25.log
+│           │       catalina.2016-06-02.log
+│           │       catalina.out
+│           │       host-manager.2016-01-02.log
+│           │       host-manager.2016-01-03.log
+│           │       host-manager.2016-01-13.log
+│           │       host-manager.2016-01-24.log
+│           │       host-manager.2016-05-25.log
+│           │       host-manager.2016-06-02.log
+│           │       localhost.2016-01-02.log
+│           │       localhost.2016-01-03.log
+│           │       localhost.2016-01-13.log
+│           │       localhost.2016-01-24.log
+│           │       localhost.2016-05-25.log
+│           │       localhost.2016-06-02.log
+│           │       localhost_access_log.2016-01-02.txt
+│           │       localhost_access_log.2016-01-03.txt
+│           │       localhost_access_log.2016-01-13.txt
+│           │       localhost_access_log.2016-01-24.txt
+│           │       localhost_access_log.2016-05-25.txt
+│           │       localhost_access_log.2016-06-02.txt
+│           │       manager.2016-01-02.log
+│           │       manager.2016-01-03.log
+│           │       manager.2016-01-13.log
+│           │       manager.2016-01-24.log
+│           │       manager.2016-05-25.log
+│           │       manager.2016-06-02.log
+│           │       
+│           ├───temp
+│           │   │   safeToDelete.tmp
+│           │   │   
+│           │   └───xuggle
+│           │           xuggle4537349617616916090.dll
+│           │           xuggle4537349617616916090.dll.xuggle
+│           │           
+│           ├───webapps
+│           │   └───ROOT
+│           │           index.jsp
+│           │           
+│           └───work
+│               └───Catalina
+│                   └───localhost
+│                       ├───itm
+│                       │   └───org
+│                       │       └───apache
+│                       │           └───jsp
+│                       │                   graph_jsp.class
+│                       │                   graph_jsp.java
+│                       │                   index_jsp.class
+│                       │                   index_jsp.java
+│                       │                   tags_jsp.class
+│                       │                   tags_jsp.java
+│                       │                   
+│                       └───ROOT
+│                           └───org
+│                               └───apache
+│                                   └───jsp
+│                                           index_jsp.class
+│                                           index_jsp.java
+│                                           
+└───webapps
+    └───itm
+        │   graph.jsp
+        │   index.jsp
+        │   tags.jsp
+        │   
+        ├───infovis
+        ├───js
+        │       Curry-1.0.1.js
+        │       dracula_algorithms.js
+        │       dracula_graffle.js
+        │       dracula_graph.js
+        │       jquery-2.1.4.min.js
+        │       raphael-min.js
+        │       raphael.js
+        │       seedrandom.js
+        │       
+        ├───media
+        │   ├───audio
+        │   │       Amazon.mp3
+        │   │       DashTheCurry[Skit].mp3
+        │   │       Epoq-Lepidoptera.ogg
+        │   │       error.wav
+        │   │       FireFire.mp3
+        │   │       Hombre.mp3
+        │   │       
+        │   ├───img
+        │   │       b17barb026.jpg
+        │   │       b17barb026_dithered.gif
+        │   │       b17maartent1427.gif
+        │   │       b17maartent1427.jpg
+        │   │       b1murene.gif
+        │   │       b1murene.jpg
+        │   │       b1shell008.jpg
+        │   │       b20nature_plants245.jpg
+        │   │       b2seaanimals005.jpg
+        │   │       b3_seaanimals014.jpg
+        │   │       b9nature_plants064.jpg
+        │   │       blue_sky4m.JPG
+        │   │       blue_sky5m.JPG
+        │   │       elephant14m.JPG
+        │   │       elephant14m.png
+        │   │       peafowl_picture1.JPG
+        │   │       picture_of_coati.JPG
+        │   │       picture_of_coati_dithered.png
+        │   │       picture_of_goat11.JPG
+        │   │       the_real_firefox.png
+        │   │       the_real_firefox_bw.png
+        │   │       the_real_firefox_dithered.bmp
+        │   │       underwater_rugby.JPG
+        │   │       zebra3m.JPG
+        │   │       
+        │   ├───md
+        │   └───video
+        │           DREIZEHN.AVI
+        │           dutch.asf
+        │           panda.avi
+        │           space.flv
+        │           
+        └───WEB-INF
+            │   web.xml
+            │   
+            └───lib
+                    commons-cli.jar
+                    itm.jar
+                    jl1.0.jar
+                    jmf.jar
+                    jogg-0.0.7.jar
+                    jorbis-0.0.15.jar
+                    logback-classic.jar
+                    logback-core.jar
+                    mp3spi1.9.4.jar
+                    prefuse.jar
+                    slf4j-api.jar
+                    tritonus_aos-0.3.6.jar
+                    tritonus_dsp-0.3.6.jar
+                    tritonus_jorbis-0.3.6.jar
+                    tritonus_share.jar
+                    vorbisspi1.0.2.jar
+                    xuggle-xuggler-5.4.jar
+                    xuggle-xuggler-test.jar
+                    xuggle-xuggler.jar
+                    
