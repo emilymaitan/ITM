@@ -7,9 +7,11 @@ media/video/
 media/img/
 webapps/itm/media/
 
-#tomcat logs
+#tomcat logs and temporary files
+test.txt
 tools/tomcat/apache-tomcat-9.0.0.M1/logs/
 tools/tomcat/apache-tomcat-9.0.0.M1/work/*
+tools/tomcat/apache-tomcat-9.0.0.M1/temp/
 
 #test output folder
 test/
