@@ -12,10 +12,22 @@
 -->
 <html>
     <head>
+        <meta charset="utf-8" />
+        <meta name="description" content="Welcome to our ITM media library!" />
+        <meta name="robots" content="noindex, nofollow" /> <!-- because we're in development -->
+        <meta name="keywords" content="ITM, Media Library, Assignment 3, Aichinger, Eichinger" />
+        <meta name="author" content="Aichinger Mara & Eichinger Rene" />
+        <meta name="viewport" content="width=device-width,  initial-scale=1.0">
+        <meta name="title" content="ITM Media Library">
+
+        <link rel="stylesheet" href="css/style.css">
+
         <script type="text/javascript" src="js/raphael.js"></script>
         <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
         <script type="text/javascript" src="js/dracula_graffle.js"></script>
         <script type="text/javascript" src="js/dracula_graph.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
     </head>
     <body>
         <h1>Welcome to the ITM media library</h1>
@@ -53,14 +65,15 @@
                     // ***************************************************************
                     
                     // show the histogram of the image on mouse-over
-                    
+
                     // display image thumbnail and metadata
                     ImageMedia img = (ImageMedia) medium;
                     %>
                     <div style="width:200px;height:200px;padding:10px;">
                         <a href="media/img/<%= img.getInstance().getName()%>">
-                        <img src="media/md/<%= img.getInstance().getName() %>.thumb.png" border="0"/>
+                        <img class="img" src="media/md/<%= img.getInstance().getName() %>.thumb.png" border="0"/>
                         </a>
+                        <img class="hist" src="media/img_hist/<%= img.getInstance().getName() %>.hist.png"/>
                     </div>
                     <div>
                         Name: <%= img.getName() %><br/>

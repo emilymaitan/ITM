@@ -1,0 +1,6 @@
+.hist {
+    display: none;
+    opacity: 0.5;
+    max-width: 200px;
+    max-height: 200px;
+}
