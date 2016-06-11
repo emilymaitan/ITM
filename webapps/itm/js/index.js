@@ -3,8 +3,11 @@
  */
 
 $(document).ready(function() {
-    $(".img").hover(function() {
-        console.log("Hovering over an image...");
-        $(this).closest(".hist").show();
+    $('div.img-container').mouseenter( function() {
+        console.log("Hovering over an image!");
+        $(this).find("img.hist").slideDown();
+    }).mouseleave( function() {
+        console.log("Hovering out...");
+        $(this).find("img.hist").slideUp();
     });
 });
