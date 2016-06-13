@@ -4,6 +4,7 @@
 <%@ page import="itm.image.*" %>
 <%@ page import="itm.model.*" %>
 <%@ page import="itm.util.*" %>
+<%@ page import="java.awt.color.ColorSpace" %>
 <!--
 /*******************************************************************************
  This file is part of the WM.II.ITM course 2016
@@ -55,7 +56,7 @@
             for ( AbstractMedia medium : media ) {
                 c++;
                 %>
-                    <div style="width:300px;height:300px;padding:10px;float:left;">
+                    <div class="media-container">
                 <%
             
                 // handle images
@@ -64,7 +65,7 @@
                     //  Fill in your code here!
                     // ***************************************************************
                     
-                    // show the histogram of the image on mouse-over
+                    // show the histogram of the image on mouse-over --> did it! jQ all the way!
 
                     // display image thumbnail and metadata
                     ImageMedia img = (ImageMedia) medium;
@@ -76,9 +77,22 @@
                         </a>
                     </div>
                     <div>
-                        Name: <%= img.getName() %><br/>
-                        Dimensions: <%= img.getWidth() %>x<%= img.getHeight() %>px<br/>
-                        Tags: <% for ( String t : img.getTags() ) { %><a href="tags.jsp?tag=<%= t %>"><%= t %></a> <% } %><br/>
+                        <b>Name:</b> <%= img.getName() %><br/>
+                        <b>Dimensions:</b> <%= img.getWidth() %>x<%= img.getHeight() %>px<br/>
+                        <b>Tags: </b><% for ( String t : img.getTags() ) { %><a href="tags.jsp?tag=<%= t %>"><%= t %></a> <% } %><br/>
+                        <b>Full-Sized Histogram:</b> <a href = "media/img_hist/<%= img.getInstance().getName() %>.hist.png">Click Here</a><br/>
+                        <br/>
+                        <!-- More metadata -->
+                        <b>Orientation:</b> <% if (img.getOrientation() == 0) { %> Landscape <% } else {%> Portrait <% } %><br/>
+                        <b>Number of Components: </b> <%= img.getNumComponents() %> <br/>
+                        <b>Number of Color Comp.: </b>  <%= img.getNumColorComponents() %> <br/>
+                        <b>Colorspace: </b>
+                            <% if (img.getColorSpaceType().equals(ColorSpace.TYPE_RGB)) { %> RGB <% }
+                                else if (img.getColorSpaceType().equals(ColorSpace.TYPE_GRAY)) {%> Gray <% }
+                                else { %> uncommon (ColorSpace <%= img.getColorSpaceType() %>) <% } %>
+                        <br/>
+                        <b>Transparency: </b>  <%= img.getTransparency() %> <br/>
+                        <b>Pixelsize: </b> <%= img.getPixelSize() %>  <br/>
                     </div>
                     <%  
                     } else 
