@@ -1,5 +1,6 @@
 #build files
 build/
+webapps/itm/WEB-INF/lib/itm.jar
 
 #media
 media/audio/
@@ -9,6 +10,7 @@ webapps/itm/media/
 
 #tomcat logs and temporary files
 test.txt
+test.log
 tools/tomcat/apache-tomcat-9.0.0.M1/logs/
 tools/tomcat/apache-tomcat-9.0.0.M1/work/*
 tools/tomcat/apache-tomcat-9.0.0.M1/temp/
