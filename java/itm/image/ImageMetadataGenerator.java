@@ -5,10 +5,13 @@ package itm.image;
     (c) University of Vienna 2009-2016
 *******************************************************************************/
 
+import com.sun.istack.internal.NotNull;
 import itm.model.ImageMedia;
 import itm.model.MediaFactory;
 import itm.util.IOUtil;
 
+import java.awt.*;
+import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.io.File;
@@ -159,10 +162,47 @@ public class ImageMetadataGenerator
         
         // end of my code
 
+        // EXTENSION FOR ASSIGNMENT 3
+        tagImageByColor(image,media);
+
         return media;
     }
-    
-        
+
+    private void tagImageByColor(BufferedImage image, ImageMedia media) throws IllegalArgumentException {
+        if (image == null || media == null) throw new IllegalArgumentException("Arguments cannot be null!");
+
+        int GREY_DIFFERENCE = 10;
+        int COLOR_DIFFERENCE = 5;
+        int red =0, blue=0, green=0, grey =0;
+
+        if (image.getColorModel().getColorSpace().getType() == ColorSpace.TYPE_RGB) { // visit every pixel
+            for(int i = 0; i < image.getHeight(); i++) {
+                for(int j = 0; j < image.getWidth(); j++) {
+                    Color col = new Color(image.getRGB(j, i));
+
+                    // ignore grey pixels (count them for debugging only)
+                    if (Math.abs(col.getBlue() - col.getRed()) < GREY_DIFFERENCE &&
+                            Math.abs(col.getBlue() - col.getGreen()) < GREY_DIFFERENCE) {
+                        grey++;
+                        continue;
+                    }
+
+                    // select the most dominant one - multiple ++ possible
+                    int max = Math.max(col.getBlue(), Math.max(col.getGreen(),col.getRed()));
+                    if ( (col.getBlue() >= (max-COLOR_DIFFERENCE)) && (col.getBlue() <= (max+COLOR_DIFFERENCE)) )
+                        blue++;
+                    if ( (col.getGreen() >= (max-COLOR_DIFFERENCE)) && (col.getGreen() <= (max+COLOR_DIFFERENCE)) )
+                        green++;
+                    if ( (col.getRed() >= (max-COLOR_DIFFERENCE)) && (col.getRed() <= (max+COLOR_DIFFERENCE)) )
+                        red++;
+                }
+            }
+        }
+
+        // we now have the color values for the most domintant pixels
+        System.out.println("Blue: " + blue + "\nGreen: " + green + "\nRed: " + red + "\n Grey: " + grey);
+    }
+
     /**
         Main method. Parses the commandline parameters and prints usage information if required.
     */
