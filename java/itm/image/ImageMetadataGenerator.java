@@ -154,6 +154,12 @@ public class ImageMetadataGenerator
         	media.setNumColorComponents(colorModel.getNumColorComponents());
         }
 
+        // EXTENSION FOR ASSIGNMENT 3
+        tagImageByColor(image,media);
+        // END OF EXTENSION
+
+        System.out.println(media.toString());
+
         // store meta data
         StringBuffer buf = media.serializeObject();
       
@@ -162,17 +168,17 @@ public class ImageMetadataGenerator
         
         // end of my code
 
-        // EXTENSION FOR ASSIGNMENT 3
-        tagImageByColor(image,media);
-
         return media;
     }
 
     private void tagImageByColor(BufferedImage image, ImageMedia media) throws IllegalArgumentException {
         if (image == null || media == null) throw new IllegalArgumentException("Arguments cannot be null!");
 
-        int GREY_DIFFERENCE = 10;
-        int COLOR_DIFFERENCE = 5;
+        // hard coded values that set the accuracy
+        int GREY_DIFFERENCE = 20;
+        int COLOR_DIFFERENCE = 10;
+        int EVAL_DIFFERENCE = 1000;
+
         int red =0, blue=0, green=0, grey =0;
 
         if (image.getColorModel().getColorSpace().getType() == ColorSpace.TYPE_RGB) { // visit every pixel
@@ -197,10 +203,26 @@ public class ImageMetadataGenerator
                         red++;
                 }
             }
-        }
+        } // end loop over all pixels
 
         // we now have the color values for the most domintant pixels
-        System.out.println("Blue: " + blue + "\nGreen: " + green + "\nRed: " + red + "\n Grey: " + grey);
+        System.out.println("Blue: " + blue + "\nGreen: " + green + "\nRed: " + red + "\nGrey: " + grey);
+        int max = Math.max(blue, Math.max(red, green));
+
+        // tag the image
+        if (blue == max) {
+            media.addTag("blue");
+            if (red >= blue-EVAL_DIFFERENCE) media.addTag("red");
+            if (green >= blue-EVAL_DIFFERENCE) media.addTag("green");
+        } else if (green == max) {
+            media.addTag("green");
+            if (red >= green-EVAL_DIFFERENCE) media.addTag("red");
+            if (blue >= green-EVAL_DIFFERENCE) media.addTag("blue");
+        } else if (red == max) {
+            media.addTag("red");
+            if (blue >= red-EVAL_DIFFERENCE) media.addTag("blue");
+            if (green >= red-EVAL_DIFFERENCE) media.addTag("green");
+        }
     }
 
     /**
