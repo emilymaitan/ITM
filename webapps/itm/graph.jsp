@@ -4,6 +4,7 @@
 <%@ page import="itm.image.*" %>
 <%@ page import="itm.model.*" %>
 <%@ page import="itm.util.*" %>
+
 <!--
 /*******************************************************************************
  This file is part of the WM.II.ITM course 2016
@@ -44,14 +45,29 @@
             var g = new Graph();
             
             // example
-            g.addNode("Tags", "", "/itm/tags.jsp");
-            g.addEdge("Tags", "Image", "/itm/anImage.png")
+            g.addNode("Tags", {name: "Tags"}, "/itm/tags.jsp");
             
         <%
+            HashMap<String,Integer> tags = new HashMap<>();
             for ( AbstractMedia medium : media ) {
-        %>
-                g.addEdge(<% /* Source as string */  %>, <% /* Target as string */ %>, <% /* URL as string */ %>);
+            	String baseurl=null;
+        		if (medium instanceof ImageMedia) baseurl="media/img/";
+        		else if (medium instanceof AudioMedia) baseurl="media/audio/";
+        		else if (medium instanceof VideoMedia) baseurl="media/video/";
+        		if (baseurl==null) continue;
+        	                  	
+            	for (String tag : medium.getTags()) {
+	            	Integer tagcount = tags.get(tag);	            	
+            		if (tagcount==null) {
+            			tags.put(tag,1);
+    	%>				    					
+    					g.addEdge("Tags", "<%= tag %>", "tags.jsp?tag=<%= tag %>");
+    	<%  			
+            		} else tags.put(tag,tagcount+1);
+        %>	
+        			g.addEdge("<%= tag %>", "<%= medium.getName() %>", "<%= baseurl+medium.getInstance().getName() %>");
         <%
+            	}
             }
         %>
             var layouter = new Graph.Layout.Spring(g);

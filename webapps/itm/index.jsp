@@ -32,6 +32,13 @@
     </head>
     <body>
         <h1>Welcome to the ITM media library</h1>
+        <form action="tags.jsp" method="get">
+        	<!-- <table><tr>  -->
+        		<label for="searchtag">search media library tags</label>        	
+		    	<input type="text" id="searchtag" name="tag"/>
+		    	<input type="submit" value="search"/>
+        	<!-- </tr></table>  -->
+        </form>        
         <a href="graph.jsp">graph</a>
          
         
