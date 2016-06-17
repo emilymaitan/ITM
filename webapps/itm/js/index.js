@@ -3,6 +3,8 @@
  */
 
 $(document).ready(function() {
+
+    // enable histogram on mouseover
     $('div.img-container').mouseenter( function() {
         console.log("Hovering over an image!");
         $(this).find("img.hist").slideDown();
@@ -10,4 +12,7 @@ $(document).ready(function() {
         console.log("Hovering out...");
         $(this).find("img.hist").slideUp();
     });
+
+    // enable popovers
+    $('[data-toggle="popover"]').popover();
 });
