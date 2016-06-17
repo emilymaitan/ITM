@@ -113,7 +113,8 @@ This file is part of the WM.II.ITM course 2016
                 // iterate over all available media objects
                 for ( AbstractMedia medium : media ) {
                     c++;
-            %>
+
+                    if (c % 3 == 1) { %> <div class="row"> <% } %>
 
             <% // handle images
 
@@ -133,21 +134,14 @@ This file is part of the WM.II.ITM course 2016
                 <h2 id ="images" class="page-header">Images</h2>
             <%
                 } // endif first image
-
-                if (c % 3 == 1) {
             %>
-            <div class="row">
-            <%
-                } // for creating rows
-            %>
-
 
                 <div class="col-lg-4">
                     <div class="panel panel-info">
                         <div class="panel-heading">
                             <a href="media/img/<%= img.getInstance().getName()%>">
                                 <%= img.getInstance().getName() %>
-                                | <a href="#" data-toggle="popover" data-html="true"  data-placement="auto" 
+                                | <a href="#" data-toggle="popover" data-html="true"  data-placement="auto"
                                      title="Metadata for File: <%= img.getInstance().getName()%>"
                                      data-content='
                                         <b>Name:</b> <%= img.getName() %><br/>
@@ -181,17 +175,68 @@ This file is part of the WM.II.ITM course 2016
                     </div>
                 </div>
 
+
             <%
             } else if ( medium instanceof AudioMedia ) {
                 // display audio thumbnail and metadata
                 AudioMedia audio = (AudioMedia) medium;
+
+                if (firstAudio) {
+                    firstAudio = false;
             %>
+                <h2 id ="audio" class="page-header">Audios</h2>
+            <%
+                }
+            %>
+
+            <div class="col-lg-4">
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <a href="media/audio/<%= audio.getInstance().getName()%>">
+                            <%= audio.getInstance().getName()%>
+                        </a>
+                    </div>
+                    <div class="panel-body">
+                        <embed src="media/md/<%= audio.getInstance().getName() %>.wav"
+                               autostart="false" width="150" height="30" />
+                    </div>
+                    <div class="panel-footer">
+                        <b>Name:</b> <%= audio.getName() %><br/>
+                        <b>Duration:</b> <%= audio.getDuration() %> sec.<br/>
+                        <b>Tags:</b> <% for ( String t : audio.getTags() ) { %><a href="tags.jsp?tag=<%= t %>"><%= t %></a> <% } %><br/>
+
+                        <b>Genre:</b> <%= audio.getGenre() != null ? audio.getGenre() : "unknown" %> <br/>
+                        <b>Interpret:</b> <%= audio.getAuthor() != null ? audio.getAuthor() : "unknown" %><br/>
+                        <b>Album:</b> <%= audio.getAlbum() != null ? audio.getAlbum() : "unknown" %><br/>
+                        <b>Track:</b> <%= audio.getTrack() != -1 ? audio.getTrack() : "unknown" %><br/>
+                        <b>Date:</b> <% if (audio.getDate() != null) audio.getDate(); else {%> unknown <%}%><br/>
+                        <b>Comment:</b> <%= audio.getComment() != null ? audio.getComment() : "unknown" %><br/>
+
+                        <b>Composer:</b> <%= audio.getComposer() != null ? audio.getComposer() : "unknown" %><br/>
+                        <b>frequency:</b> <%= audio.getFrequency() != -1 ? audio.getFrequency() : "unknown" %><br/>
+                        <b>Bitrate:</b> <%= audio.getBitrate() != -1 ? audio.getBitrate() : "unknown" %><br/>
+                        <b>Channels:</b> <%= audio.getChannels() != -1 ? audio.getChannels() : "unknown" %><br/>
+
+                        <b>Encoding:</b> <%= audio.getEncoding() != null ? audio.getEncoding() : "unknown" %><br/>
+                    </div>
+                </div>
+            </div>
 
             <%
             } else if ( medium instanceof VideoMedia ) {
                 // handle videos thumbnail and metadata...
                 VideoMedia video = (VideoMedia) medium;
+
+                if (firstVideo) {
+                    firstVideo = false;
+
             %>
+                <h2 id="video" class="page-header">Videos</h2>
+            <%
+                }
+            %>
+
+                <!-- VID -->
 
             <%
             } else {}
