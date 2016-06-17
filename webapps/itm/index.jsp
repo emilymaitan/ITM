@@ -39,7 +39,7 @@ This file is part of the WM.II.ITM course 2016
     <script type="text/javascript" src="js/index.js"></script>
 </head>
 
-<body>
+<body data-spy="scroll" data-target=".navbar" data-offset="50">
 
     <!-- NAV -->
     <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -57,6 +57,9 @@ This file is part of the WM.II.ITM course 2016
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="index.jsp">Home</a></li>
+                    <li><a href="#images">Images</a></li>
+                    <li><a href="#audio">Audio</a></li>
+                    <li><a href="#video">Videos</a></li>
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
@@ -198,7 +201,7 @@ This file is part of the WM.II.ITM course 2016
                     </div>
                     <div class="panel-body">
                         <embed src="media/md/<%= audio.getInstance().getName() %>.wav"
-                               autostart="false" width="150" height="30" />
+                               autostart="false" width="150" height="30"></embed>
                     </div>
                     <div class="panel-footer">
                         <b>Name:</b> <%= audio.getName() %><br/>
