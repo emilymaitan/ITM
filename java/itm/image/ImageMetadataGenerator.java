@@ -157,7 +157,7 @@ public class ImageMetadataGenerator
         if (colorModel.getNumColorComponents() > 1) tagImageByColor(image,media);
         // END OF EXTENSION
 
-        System.out.println(media.toString());
+        //System.out.println(media.toString());
 
         // store meta data
         StringBuffer buf = media.serializeObject();
@@ -181,7 +181,7 @@ public class ImageMetadataGenerator
         // since there are more colors
         int EVAL_DIFFERENCE = image.getWidth()*image.getHeight()*3/100;
 
-        System.out.println("Eval-Difference: " + EVAL_DIFFERENCE);
+        //System.out.println("Eval-Difference: " + EVAL_DIFFERENCE);
 
         int red =0, blue=0, green=0, grey =0;
 
@@ -209,7 +209,7 @@ public class ImageMetadataGenerator
             } // end loop over all pixels
 
             // we now have the color values for the most domintant pixels
-            System.out.println("Blue: " + blue + "\nGreen: " + green + "\nRed: " + red + "\nGrey: " + grey);
+            //System.out.println("Blue: " + blue + "\nGreen: " + green + "\nRed: " + red + "\nGrey: " + grey);
             int max = Math.max(blue, Math.max(red, green));
 
             // tag the image
