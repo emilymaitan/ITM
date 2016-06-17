@@ -204,6 +204,7 @@ This file is part of the WM.II.ITM course 2016
                         <b>Name:</b> <%= audio.getName() %><br/>
                         <b>Duration:</b> <%= audio.getDuration() %> sec.<br/>
                         <b>Tags:</b> <% for ( String t : audio.getTags() ) { %><a href="tags.jsp?tag=<%= t %>"><%= t %></a> <% } %><br/>
+                        <br/>
 
                         <b>Genre:</b> <%= audio.getGenre() != null ? audio.getGenre() : "unknown" %> <br/>
                         <b>Interpret:</b> <%= audio.getAuthor() != null ? audio.getAuthor() : "unknown" %><br/>
@@ -236,7 +237,39 @@ This file is part of the WM.II.ITM course 2016
                 }
             %>
 
-                <!-- VID -->
+            <div class="col-lg-4">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <a href="media/video/<%= video.getInstance().getName()%>"><%= video.getInstance().getName()%></a>
+                    </div>
+                    <div class="panel-body">
+                        <object width="200" height="200">
+                            <param name="movie" value="media/md/<%= video.getInstance().getName() %>_thumb.avi">
+                            <embed src="media/md/<%= video.getInstance().getName() %>_thumb.avi" width="200" height="200">
+                            </embed>
+                        </object>
+                    </div>
+                    <div class="panel-footer">
+                        <b>Name:</b> <a href="media/video/<%= video.getInstance().getName()%>"><%= video.getName() %></a><br/>
+                        <b>Tags:</b> <% for ( String t : video.getTags() ) { %><a href="tags.jsp?tag=<%= t %>"><%= t %></a> <% } %><br/>
+                        <br/>
+
+                        <b>Length:</b> <%= video.getVideoLength() != null ? video.getVideoLength() : "unknown" %><br/>
+                        <b>Framerate:</b> <%= video.getVideoFrameRate() != null ? video.getVideoFrameRate() : "unknown" %><br/>
+                        <b>Width:</b> <%= video.getVideoWidth() != null ? video.getVideoWidth() + " px" : "unknown" %><br/>
+                        <b>Height:</b> <%= video.getVideoHeight() != null ? video.getVideoHeight() + " px": "unknown" %><br/>
+                        <b>Video Codec:</b> <%= video.getVideoCodec() != null ? video.getVideoCodec() : "unknown" %><br/>
+                        <b>Video Codec ID:</b> <%= video.getVideoCodecID() != null ? video.getVideoCodecID() : "unknown" %><br/>
+                        <hr>
+                        <b>Audio Codec:</b> <%= video.getAudioCodec() != null ? video.getAudioCodec() : "unknown" %><br/>
+                        <b>Audio Codec ID:</b> <%= video.getAudiocCodecID() != null ? video.getAudiocCodecID() : "unknown" %><br/>
+                        <b>Channels:</b> <%= video.getAudioChannels() != null ? video.getAudioChannels() : "unknown" %><br/>
+                        <b>Sample Rate:</b> <%= video.getAudioSampleRate() != null ? video.getAudioSampleRate() : "unknown" %><br/>
+                        <b>Bitrate:</b> <%= video.getAudioBitRate() != null ? video.getAudioBitRate() : "unknown" %><br/>
+
+                    </div>
+                </div>
+            </div>
 
             <%
             } else {}
