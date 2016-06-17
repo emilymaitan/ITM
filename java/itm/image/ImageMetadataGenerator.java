@@ -176,7 +176,10 @@ public class ImageMetadataGenerator
         // hard coded values that set the accuracy
         int GREY_DIFFERENCE = 20;
         int COLOR_DIFFERENCE = 10;
-        int EVAL_DIFFERENCE = 1000;
+
+        // the bigger the picture (the more pixels), the higher the value
+        // since there are more colors
+        int EVAL_DIFFERENCE = image.getWidth()*image.getHeight()*3/100;
 
         int red =0, blue=0, green=0, grey =0;
 
@@ -201,28 +204,29 @@ public class ImageMetadataGenerator
                     if ( (col.getRed() >= (max-COLOR_DIFFERENCE)) && (col.getRed() <= (max+COLOR_DIFFERENCE)) )
                         red++;
                 }
+            } // end loop over all pixels
+
+            // we now have the color values for the most domintant pixels
+            System.out.println("Blue: " + blue + "\nGreen: " + green + "\nRed: " + red + "\nGrey: " + grey);
+            int max = Math.max(blue, Math.max(red, green));
+
+            // tag the image
+            if (blue == max) {
+                media.addTag("blue");
+                if (red >= blue-EVAL_DIFFERENCE) media.addTag("red");
+                if (green >= blue-EVAL_DIFFERENCE) media.addTag("green");
+            } else if (green == max) {
+                media.addTag("green");
+                if (red >= green-EVAL_DIFFERENCE) media.addTag("red");
+                if (blue >= green-EVAL_DIFFERENCE) media.addTag("blue");
+            } else if (red == max) {
+                media.addTag("red");
+                if (blue >= red-EVAL_DIFFERENCE) media.addTag("blue");
+                if (green >= red-EVAL_DIFFERENCE) media.addTag("green");
             }
-        } // end loop over all pixels
 
-        // we now have the color values for the most domintant pixels
-        System.out.println("Blue: " + blue + "\nGreen: " + green + "\nRed: " + red + "\nGrey: " + grey);
-        int max = Math.max(blue, Math.max(red, green));
-
-        // tag the image
-        if (blue == max) {
-            media.addTag("blue");
-            if (red >= blue-EVAL_DIFFERENCE) media.addTag("red");
-            if (green >= blue-EVAL_DIFFERENCE) media.addTag("green");
-        } else if (green == max) {
-            media.addTag("green");
-            if (red >= green-EVAL_DIFFERENCE) media.addTag("red");
-            if (blue >= green-EVAL_DIFFERENCE) media.addTag("blue");
-        } else if (red == max) {
-            media.addTag("red");
-            if (blue >= red-EVAL_DIFFERENCE) media.addTag("blue");
-            if (green >= red-EVAL_DIFFERENCE) media.addTag("green");
-        }
-    }
+        } // end if
+    } // end of function
 
     /**
         Main method. Parses the commandline parameters and prints usage information if required.
