@@ -5,12 +5,11 @@ package itm.image;
     (c) University of Vienna 2009-2016
 *******************************************************************************/
 
-import com.sun.istack.internal.NotNull;
 import itm.model.ImageMedia;
 import itm.model.MediaFactory;
 import itm.util.IOUtil;
 
-import java.awt.*;
+import java.awt.Color;
 import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
