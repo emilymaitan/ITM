@@ -30,13 +30,12 @@ This file is part of the WM.II.ITM course 2016
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/style.css">
 
-    <script type="text/javascript" src="js/jquery-3.0.0.js"></script>
+    <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.js"></script>
 
     <script type="text/javascript" src="js/raphael.js"></script>
     <script type="text/javascript" src="js/dracula_graffle.js"></script>
     <script type="text/javascript" src="js/dracula_graph.js"></script>
-    <script type="text/javascript" src="js/index.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
 </head>
 
@@ -102,6 +101,8 @@ This file is part of the WM.II.ITM course 2016
                 // get all media objects
                 ArrayList<AbstractMedia> media = MediaFactory.getMedia();
 
+                int c=0; // counter for rowbreak after 3 thumbnails.
+
                 /* So I had a look at the Medialibrary. It loads the different types
                 * sequentially - in the order IMAGES - AUDIO - VIDEO
                 * We can work with the fact that they're in order to create a nicer layout!
@@ -111,6 +112,7 @@ This file is part of the WM.II.ITM course 2016
 
                 // iterate over all available media objects
                 for ( AbstractMedia medium : media ) {
+                    c++;
             %>
 
             <% // handle images
@@ -128,14 +130,56 @@ This file is part of the WM.II.ITM course 2016
                     if (firstImage) {
                         firstImage = false;
             %>
-                <h2 class="page-header">Images</h2>
-
-                
+                <h2 id ="images" class="page-header">Images</h2>
             <%
                 } // endif first image
+
+                if (c % 3 == 1) {
+            %>
+            <div class="row">
+            <%
+                } // for creating rows
             %>
 
 
+                <div class="col-lg-4">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <a href="media/img/<%= img.getInstance().getName()%>">
+                                <%= img.getInstance().getName() %>
+                                | <a href="#" data-toggle="popover" data-html="true"  data-placement="auto" 
+                                     title="Metadata for File: <%= img.getInstance().getName()%>"
+                                     data-content='
+                                        <b>Name:</b> <%= img.getName() %><br/>
+                                        <b>Dimensions:</b> <%= img.getWidth() %>x<%= img.getHeight() %>px<br/>
+                                        <b>Tags: </b><% for ( String t : img.getTags() ) { %><a href="tags.jsp?tag=<%= t %>"><%= t %></a> <% } %><br/>
+                                        <b>Full-Sized Histogram:</b> <a href = "media/img_hist/<%= img.getInstance().getName() %>.hist.png">Click Here</a><br/>
+                                        <br/>
+                                        <!-- More metadata -->
+                                        <b>Orientation:</b> <% if (img.getOrientation() == 0) { %> Landscape <% } else {%> Portrait <% } %><br/>
+                                        <b>Number of Components: </b> <%= img.getNumComponents() %> <br/>
+                                        <b>Number of Color Comp.: </b>  <%= img.getNumColorComponents() %> <br/>
+                                        <b>Colorspace: </b>
+                                            <% if (img.getColorSpaceType().equals(ColorSpace.TYPE_RGB)) { %> RGB <% }
+                                                else if (img.getColorSpaceType().equals(ColorSpace.TYPE_GRAY)) {%> Gray <% }
+                                                else { %> uncommon (ColorSpace <%= img.getColorSpaceType() %>) <% } %>
+                                        <br/>
+                                        <b>Transparency: </b>  <%= img.getTransparency() %> <br/>
+                                        <b>Pixelsize: </b> <%= img.getPixelSize() %>  <br/>
+                                    '>
+                                    Metadata
+                                  </a>
+                                | <a href = "media/img_hist/<%= img.getInstance().getName() %>.hist.png">Full-Sized Hist.</a><br/>
+                            </a>
+                        </div>
+                        <div class="panel-body img-container">
+                            <a href="media/img/<%= img.getInstance().getName()%>">
+                                <img class="img" src="media/md/<%= img.getInstance().getName() %>.thumb.png" border="0"/>
+                                <img class="hist" src="media/img_hist/<%= img.getInstance().getName() %>.hist.png"/>
+                            </a>
+                        </div>
+                    </div>
+                </div>
 
             <%
             } else if ( medium instanceof AudioMedia ) {
@@ -150,8 +194,16 @@ This file is part of the WM.II.ITM course 2016
             %>
 
             <%
-                } else {}
+            } else {}
 
+            if (c % 3 == 0) {
+
+            %>
+
+            </div> <!-- row -->
+
+            <%
+            }
                 } // for
             %>
 
