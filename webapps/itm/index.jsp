@@ -88,6 +88,11 @@ This file is part of the WM.II.ITM course 2016
     <div class="page-container">
         <div class="container">
 
+            <h1 class="page-header">
+                <span class="glyphicon glyphicon-heart" style="color: pink;"></span>
+                Welcome to the ITM media library!
+            </h1>
+
             <%
                 // get the file paths - this is NOT good style (resources should be loaded via inputstreams...)
                 // we use it here for the sake of simplicity.
@@ -277,14 +282,7 @@ This file is part of the WM.II.ITM course 2016
             <%
             } else {}
 
-            if (c % 3 == 0) {
-
-            %>
-
-            </div> <!-- row -->
-
-            <%
-            }
+            if (c % 3 == 0) { %> </div> <!-- row --> <% }
                 } // for
             %>
 
