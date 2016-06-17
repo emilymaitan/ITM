@@ -24,7 +24,7 @@
         <meta name="viewport" content="width=device-width,  initial-scale=1.0">
         <meta name="title" content="ITM Media Library - Search">
 
-        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/style_old.css">
 
         <script type="text/javascript" src="js/raphael.js"></script>
         <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>

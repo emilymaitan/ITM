@@ -28,6 +28,7 @@ This file is part of the WM.II.ITM course 2016
     <meta name="title" content="ITM Media Library | Home">
 
     <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/style.css">
 
     <script type="text/javascript" src="js/jquery-3.0.0.js"></script>
     <script type="text/javascript" src="js/bootstrap.js"></script>
@@ -58,10 +59,104 @@ This file is part of the WM.II.ITM course 2016
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="index.jsp">Home</a></li>
                 </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+
+                    <li>
+                        <form class="navbar-form" action="tags.jsp" method="get">
+                            <div class="input-group">
+                                <input type="text" id="searchtag" name="tag" placeholder="search library by tag..." class="form-control">
+                               <span class="input-group-btn">
+                                <button class="btn btn-primary" type="submit" value="search">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                </button>
+                              </span>
+                            </div>
+                        </form>
+                    </li>
+                    <li>
+                        <a href="graph.jsp">Graph</a>
+                    </li>
+                </ul>
+
             </div>
-        </div>
+        </div> <!-- Container -->
     </nav>
 
+    <div class="page-container">
+        <div class="container">
+
+            <%
+                // get the file paths - this is NOT good style (resources should be loaded via inputstreams...)
+                // we use it here for the sake of simplicity.
+                String basePath = getServletConfig().getServletContext().getRealPath( "media"  );
+                if ( basePath == null )
+                    throw new NullPointerException( "could not determine base path of media directory! please set manually in JSP file!" );
+                File base = new File( basePath );
+                File imageDir = new File( basePath, "img");
+                File audioDir = new File( basePath, "audio");
+                File videoDir = new File( basePath, "video");
+                File metadataDir = new File( basePath, "md");
+                MediaFactory.init( imageDir, audioDir, videoDir, metadataDir );
+
+                // get all media objects
+                ArrayList<AbstractMedia> media = MediaFactory.getMedia();
+
+                /* So I had a look at the Medialibrary. It loads the different types
+                * sequentially - in the order IMAGES - AUDIO - VIDEO
+                * We can work with the fact that they're in order to create a nicer layout!
+                * */
+
+                boolean firstImage = true, firstAudio = true, firstVideo = true;
+
+                // iterate over all available media objects
+                for ( AbstractMedia medium : media ) {
+            %>
+
+            <% // handle images
+
+                if ( medium instanceof ImageMedia ) {
+                    // ***************************************************************
+                    //  Fill in your code here!
+                    // ***************************************************************
+
+                    // show the histogram of the image on mouse-over --> did it! jQ all the way!
+
+                    // display image thumbnail and metadata
+                    ImageMedia img = (ImageMedia) medium;
+
+                    if (firstImage) {
+                        firstImage = false;
+            %>
+                <h2 class="page-header">Images</h2>
+
+                
+            <%
+                } // endif first image
+            %>
+
+
+
+            <%
+            } else if ( medium instanceof AudioMedia ) {
+                // display audio thumbnail and metadata
+                AudioMedia audio = (AudioMedia) medium;
+            %>
+
+            <%
+            } else if ( medium instanceof VideoMedia ) {
+                // handle videos thumbnail and metadata...
+                VideoMedia video = (VideoMedia) medium;
+            %>
+
+            <%
+                } else {}
+
+                } // for
+            %>
+
+        </div>
+    </div>
 
 </body>
 </html>
