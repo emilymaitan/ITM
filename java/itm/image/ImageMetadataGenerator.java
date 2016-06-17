@@ -154,7 +154,7 @@ public class ImageMetadataGenerator
         }
 
         // EXTENSION FOR ASSIGNMENT 3
-        tagImageByColor(image,media);
+        if (colorModel.getNumColorComponents() > 1) tagImageByColor(image,media);
         // END OF EXTENSION
 
         System.out.println(media.toString());
