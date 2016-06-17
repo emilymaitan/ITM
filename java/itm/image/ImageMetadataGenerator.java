@@ -181,6 +181,8 @@ public class ImageMetadataGenerator
         // since there are more colors
         int EVAL_DIFFERENCE = image.getWidth()*image.getHeight()*3/100;
 
+        System.out.println("Eval-Difference: " + EVAL_DIFFERENCE);
+
         int red =0, blue=0, green=0, grey =0;
 
         if (image.getColorModel().getColorSpace().getType() == ColorSpace.TYPE_RGB) { // visit every pixel
