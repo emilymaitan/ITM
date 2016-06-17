@@ -144,7 +144,7 @@ This file is part of the WM.II.ITM course 2016
                         <div class="panel-heading">
                             <a href="media/img/<%= img.getInstance().getName()%>">
                                 <%= img.getInstance().getName() %>
-                                | <a href="#" data-toggle="popover" data-html="true"  data-placement="auto"
+                                | <a href="#" data-toggle="popover" data-trigger="focus" data-html="true"  data-placement="auto"
                                      title="Metadata for File: <%= img.getInstance().getName()%>"
                                      data-content='
                                         <b>Name:</b> <%= img.getName() %><br/>
